@@ -32,7 +32,11 @@ docker ps
 ./gradlew bootRun
 ```
 * or start the Tic=tac-toe application from IntelliJ [TicTacToeApplication.java](src/main/java/com/adsquare/tictactoe/TicTacToeApplication.java).
-
+* stop MongoDB
+```
+docker-compose stop
+docker-compose down
+```
 ## Tests
 ```
 ./gradlew test
