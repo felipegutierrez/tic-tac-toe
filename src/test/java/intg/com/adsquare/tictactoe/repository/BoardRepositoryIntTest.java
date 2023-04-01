@@ -1,12 +1,17 @@
 package com.adsquare.tictactoe.repository;
 
+import static com.adsquare.tictactoe.Util.boardId01;
+import static com.adsquare.tictactoe.Util.boardId02;
+import static com.adsquare.tictactoe.Util.getBoards;
+import static com.adsquare.tictactoe.Util.getScoreBoard01;
+import static com.adsquare.tictactoe.Util.getScoreBoard02;
+import static com.adsquare.tictactoe.Util.getScoreBoard03;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.LocalTime;
-import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +23,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import com.adsquare.tictactoe.domain.Board;
 import com.adsquare.tictactoe.domain.Score;
+import com.adsquare.tictactoe.util.Player;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -27,19 +33,13 @@ import reactor.test.StepVerifier;
 @TestPropertySource(properties = "spring.mongodb.embedded.version=4.0.21")
 class BoardRepositoryIntTest {
 
-    private final String boardId01 = "abc";
-    private final String boardId02 = "def";
-
     @Autowired
     private BoardRepository boardRepository;
 
     @BeforeEach
     void setUp() {
-        var board = List.of(
-            new Board(boardId01, "x", "x", true, getScoreBoard01()),
-            new Board(boardId02, "o", "", false, getScoreBoard02())
-        );
-        boardRepository.saveAll(board)
+        var board =
+        boardRepository.saveAll(getBoards())
             .blockLast(); // ensure to be synchronous because tests must start only after this. only used for test.
     }
 
@@ -72,7 +72,7 @@ class BoardRepositoryIntTest {
         StepVerifier.create(boardMono)
             .assertNext(board -> {
                 assertEquals(boardId01, board.getId());
-                assertEquals("x", board.getWinnerPlayer());
+                assertEquals(Player.A.name(), board.getWinnerPlayer());
                 assertEquals(true, board.getBoardComplete());
                 assertEquals(7, board.getScores().size());
                 assertThat(board.getScores(), hasItem(getScoreBoard01().get(0)));
@@ -89,7 +89,7 @@ class BoardRepositoryIntTest {
     @Test
     void saveBoard() {
         // given
-        var board = new Board(null, "o", "", false, getScoreBoard03());
+        var board = new Board(null, Player.B.name(), "", false, getScoreBoard03());
 
         // when
         final Mono<Board> boardMono = boardRepository.save(board).log();
@@ -98,7 +98,7 @@ class BoardRepositoryIntTest {
         StepVerifier.create(boardMono)
             .assertNext(b -> {
                 assertNotNull(b.getId());
-                assertEquals("o", b.getPlayerOnTurn());
+                assertEquals(Player.B.name(), b.getPlayerOnTurn());
                 assertEquals("", b.getWinnerPlayer());
                 assertEquals(false, b.getBoardComplete());
                 assertEquals(3, b.getScores().size());
@@ -112,10 +112,10 @@ class BoardRepositoryIntTest {
     @Test
     void updateBoard() {
         // given
-        var newScore = new Score(null, "o", 8, LocalTime.of(11, 10, 30));
+        var newScore = new Score(null, Player.B.name(), 8, LocalTime.of(11, 10, 30));
         Board board = boardRepository.findById(boardId02).block();
         assert board != null;
-        board.setPlayerOnTurn("x");
+        board.setPlayerOnTurn(Player.A.name());
         board.getScores().add(newScore);
 
         // when
@@ -125,7 +125,7 @@ class BoardRepositoryIntTest {
         StepVerifier.create(boardMono)
             .assertNext(b -> {
                 assertNotNull(b.getId());
-                assertEquals("x", b.getPlayerOnTurn());
+                assertEquals(Player.A.name(), b.getPlayerOnTurn());
                 assertEquals("", b.getWinnerPlayer());
                 assertEquals(false, b.getBoardComplete());
                 assertEquals(4, b.getScores().size());
@@ -137,31 +137,16 @@ class BoardRepositoryIntTest {
             .verifyComplete();
     }
 
-    private List<Score> getScoreBoard01() {
-        return List.of(
-            new Score(null, "x", 3, LocalTime.of(10, 10, 0)),
-            new Score(null, "o", 1, LocalTime.of(10, 10, 10)),
-            new Score(null, "x", 7, LocalTime.of(10, 10, 20)),
-            new Score(null, "o", 5, LocalTime.of(10, 10, 30)),
-            new Score(null, "x", 9, LocalTime.of(10, 10, 40)),
-            new Score(null, "o", 6, LocalTime.of(10, 10, 50)),
-            new Score(null, "x", 8, LocalTime.of(10, 11, 0))
-        );
-    }
+    @Test
+    void deleteAllBoard() {
+        // when
+        boardRepository.deleteAll().block();
 
-    private List<Score> getScoreBoard02() {
-        return List.of(
-            new Score(null, "x", 5, LocalTime.of(11, 10, 0)),
-            new Score(null, "o", 1, LocalTime.of(11, 10, 10)),
-            new Score(null, "x", 7, LocalTime.of(11, 10, 20))
-        );
-    }
+        final Flux<Board> boardFlux = boardRepository.findAll().log();
 
-    private List<Score> getScoreBoard03() {
-        return List.of(
-            new Score(null, "x", 5, LocalTime.of(12, 10, 0)),
-            new Score(null, "o", 1, LocalTime.of(12, 10, 10)),
-            new Score(null, "x", 7, LocalTime.of(12, 10, 20))
-        );
+        // then
+        StepVerifier.create(boardFlux)
+            .expectNextCount(0)
+            .verifyComplete();
     }
 }
