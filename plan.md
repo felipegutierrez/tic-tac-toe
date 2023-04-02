@@ -17,6 +17,12 @@
       - timestamp: to get the last player and the next turn
 
 ```text
+# available positions
+|-----|
+|1,2,3|
+|4,5,6|
+|7,8,9|
+|-----|
 
 scores table
 |board_id,turn|

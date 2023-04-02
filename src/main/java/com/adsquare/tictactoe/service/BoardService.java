@@ -19,11 +19,25 @@ public class BoardService {
 
     private final Random random;
     private final List<Integer> availablePositions;
+    private final List<List<Integer>> completedPositions;
     private final BoardRepository boardRepository;
 
     public BoardService(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
         this.availablePositions = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        this.completedPositions = List.of(
+            // horizontal
+            List.of(1, 2, 3),
+            List.of(4, 5, 6),
+            List.of(7, 8, 9),
+            // vertical
+            List.of(1, 4, 7),
+            List.of(2, 5, 8),
+            List.of(3, 6, 9),
+            // diagonal
+            List.of(1, 5, 9),
+            List.of(3, 5, 7)
+        );
         this.random = new Random();
     }
 
@@ -51,6 +65,9 @@ public class BoardService {
                     if (isPositionAvailable(board, move)) {
                         board.setPlayerOnTurn(move.getPlayer());
                         board.getScores().add(new Score(null, move.getPlayer(), move.getPosition(), LocalTime.now()));
+                        if (isBoardComplete(board)) {
+                            board.setBoardComplete(true);
+                        }
                         return boardRepository.save(board);
                     } else {
                         return Mono.error(new Exception("Position " + move.getPosition() + " is not available"));
@@ -92,6 +109,30 @@ public class BoardService {
             .filter(score -> score.getPosition().equals(move.getPosition()))
             .findFirst()
             .isEmpty();
+    }
+
+    protected boolean isBoardComplete(final Board board) {
+        var listPositionsPlayerA = getPositions(board, Player.A);
+        var listPositionsPlayerB = getPositions(board, Player.B);
+
+        return isWinner(listPositionsPlayerA) || isWinner(listPositionsPlayerB);
+    }
+
+    private boolean isWinner(final List<Integer> listPositions) {
+        for (List<Integer> completedPosition : completedPositions) {
+            var result = listPositions.containsAll(completedPosition);
+            if (result) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private List<Integer> getPositions(final Board board, final Player player) {
+        return board.getScores()
+            .stream().filter(score -> score.getPlayer().equals(player.name()))
+            .map(Score::getPosition)
+            .toList();
     }
 
     private Player getRandomPlayer() {
