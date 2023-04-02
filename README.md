@@ -61,64 +61,97 @@ curl http://localhost:8080/v1/showboards | json_pp -json_opt pretty,canonical
    }
 ]
 ```
-3. register a move using the `playerOnTurn : A`
+3. register moves on the board each user at a time
+* register a move using the `playerOnTurn : A`
 ```shell
 curl -i \
 -d '{"boardId":"6429b52726edc9050fa31a77", "player": "A", "position": 3}' \
 -H "Content-Type: application/json" \
 -X PUT http://localhost:8080/v1/playboard
 ```
-4. register a move using the `playerOnTurn : B`
+* register a move using the `playerOnTurn : B`
 ```shell
 curl -i \
 -d '{"boardId":"6429b52726edc9050fa31a77", "player": "B", "position": 1}' \
 -H "Content-Type: application/json" \
 -X PUT http://localhost:8080/v1/playboard
 ```
-5. register a move using the `playerOnTurn : A`
+* register a move using the `playerOnTurn : A`
 ```shell
 curl -i \
 -d '{"boardId":"6429b52726edc9050fa31a77", "player": "A", "position": 7}' \
 -H "Content-Type: application/json" \
 -X PUT http://localhost:8080/v1/playboard
 ```
-6. register a move using the `playerOnTurn : B`
+* register a move using the `playerOnTurn : B`
 ```shell
 curl -i \
 -d '{"boardId":"6429b52726edc9050fa31a77", "player": "B", "position": 5}' \
 -H "Content-Type: application/json" \
 -X PUT http://localhost:8080/v1/playboard
 ```
-7. register a move using the `playerOnTurn : A`
+* register a move using the `playerOnTurn : A`
 ```shell
 curl -i \
 -d '{"boardId":"6429b52726edc9050fa31a77", "player": "A", "position": 9}' \
 -H "Content-Type: application/json" \
 -X PUT http://localhost:8080/v1/playboard
 ```
-8. register a move using the `playerOnTurn : B`
+* register a move using the `playerOnTurn : B`
 ```shell
 curl -i \
 -d '{"boardId":"6429b52726edc9050fa31a77", "player": "B", "position": 6}' \
 -H "Content-Type: application/json" \
 -X PUT http://localhost:8080/v1/playboard
 ```
-9. register a move using the `playerOnTurn : A`
+* register a move using the `playerOnTurn : A`
 ```shell
 curl -i \
 -d '{"boardId":"6429b52726edc9050fa31a77", "player": "A", "position": 8}' \
 -H "Content-Type: application/json" \
 -X PUT http://localhost:8080/v1/playboard
 ```
-10. `playerOnTurn : A` wins and you cannot register further moves. Check the board again.
+4. `playerOnTurn : A` wins and you cannot register further moves. Check the board again.
 ```shell
 curl http://localhost:8080/v1/showboards | json_pp -json_opt pretty,canonical
 ```
-11. delete all boards
+5. start a new board and execute concurrent calls
+* delete all boards
 ```shell
-curl -i \
--H "Content-Type: application/json" \
--X POST http://localhost:8080/v1/deleteboards
+curl -i -H "Content-Type: application/json" -X POST http://localhost:8080/v1/deleteboards
+```
+* start a new board
+```shell
+curl -i -H "Content-Type: application/json" -X POST http://localhost:8080/v1/startboard
+```
+* show the new board and copy the `boardId`
+```shell
+curl http://localhost:8080/v1/showboards | json_pp -json_opt pretty,canonical
+```
+* execute concurrent calls with the same user `player A` to all positions on the board
+```shell
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 1}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 2}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 3}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 4}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 5}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 6}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 7}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 8}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 9}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 1}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 2}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 3}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 4}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 5}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 6}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 7}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 8}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard & \
+curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 9}' -H "Content-Type: application/json" -X PUT http://localhost:8080/v1/playboard
+```
+* check the board state and ensure that player A has recorded only one position on the board
+```shell
+curl http://localhost:8080/v1/showboards | json_pp -json_opt pretty,canonical
 ```
 ## Tests
 ```shell
