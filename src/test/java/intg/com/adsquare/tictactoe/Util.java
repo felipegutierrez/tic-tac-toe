@@ -13,11 +13,17 @@ public class Util {
     public static final String boardId02 = "def";
 
     public static List<Board> getBoards() {
-        return List.of(
-            new Board(boardId01, Player.A.name(), Player.A.name(), true, getScoreBoard01()),
-            new Board(boardId02, Player.B.name(), "", false, getScoreBoard02())
-        );
+        return List.of(getBoard01(), getBoard02());
     }
+
+    public static Board getBoard01() {
+        return new Board(boardId01, Player.A.name(), Player.A.name(), true, getScoreBoard01());
+    }
+
+    public static Board getBoard02() {
+        return new Board(boardId02, Player.B.name(), "", false, getScoreBoard02());
+    }
+
     public static List<Score> getScoreBoard01() {
         return List.of(
             new Score(null, Player.A.name(), 3, LocalTime.of(10, 10, 0)),

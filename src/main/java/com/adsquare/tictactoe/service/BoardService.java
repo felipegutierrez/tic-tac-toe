@@ -17,11 +17,13 @@ import reactor.core.publisher.Mono;
 @Service
 public class BoardService {
 
-    private final BoardRepository boardRepository;
     private final Random random;
+    private final List<Integer> availablePositions;
+    private final BoardRepository boardRepository;
 
     public BoardService(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
+        this.availablePositions = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
         this.random = new Random();
     }
 
@@ -45,11 +47,17 @@ public class BoardService {
     public Mono<Board> updateBoard(Move move) {
         return findBoard(move.getBoardId())
             .flatMap(board -> {
-                board.setPlayerOnTurn(
-                    board.getPlayerOnTurn().equals(Player.A.name()) ? Player.B.name() : Player.A.name()
-                );
-                board.getScores().add(new Score(null, move.getPlayer(), move.getPosition(), LocalTime.now()));
-                return boardRepository.save(board);
+                if (board.getPlayerOnTurn().equals(move.getPlayer())) {
+                    if (isPositionAvailable(board, move)) {
+                        board.setPlayerOnTurn(move.getPlayer());
+                        board.getScores().add(new Score(null, move.getPlayer(), move.getPosition(), LocalTime.now()));
+                        return boardRepository.save(board);
+                    } else {
+                        return Mono.error(new Exception("Position " + move.getPosition() + " is not available"));
+                    }
+                } else {
+                    return Mono.error(new Exception("It is not the turn of player " + move.getPlayer()));
+                }
             })
             .log();
     }
@@ -57,21 +65,33 @@ public class BoardService {
     /**
      * Terminate all boards by setting "complete = TRUE" regardless if the game was finished
      */
-    public void terminateAllBoards() {
-        System.out.println("----------");
-        final Flux<Board> boards =
-            boardRepository.findAll()
-                .filter(b -> b.getBoardComplete().equals(Boolean.FALSE))
-                .map(b -> {
-                    b.setBoardComplete(Boolean.TRUE);
-                    return b;
-                })
-                .log();
-        System.out.println("----------");
-        // final Flux<Board> result =
-        boardRepository.saveAll(boards).log();
-        System.out.println("----------");
-        // TODO: terminate all boards by setting complete to TRUE
+    public Flux<Board> terminateAllBoards() {
+        return boardRepository.findAll()
+            .filter(b -> b.getBoardComplete().equals(Boolean.FALSE))
+            .flatMap(b -> {
+                b.setBoardComplete(Boolean.TRUE);
+                return boardRepository.save(b);
+            })
+            .log();
+    }
+
+    /**
+     * Verifies if a given position is available in the giver board
+     *
+     * @param move
+     * @return
+     */
+    protected boolean isPositionAvailable(final Board board, final Move move) {
+        if (!availablePositions.contains(move.getPosition()) ||
+            Boolean.TRUE.equals(board.getBoardComplete()) ||
+            !board.getPlayerOnTurn().equals(move.getPlayer())) {
+            return false;
+        }
+        return board.getScores()
+            .stream()
+            .filter(score -> score.getPosition().equals(move.getPosition()))
+            .findFirst()
+            .isEmpty();
     }
 
     private Player getRandomPlayer() {

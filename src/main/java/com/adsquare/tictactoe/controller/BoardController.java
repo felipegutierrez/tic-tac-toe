@@ -38,24 +38,26 @@ public class BoardController {
     @PutMapping("/playboard")
     @ResponseStatus(HttpStatus.OK)
     public Mono<Board> playBoard(@RequestBody Move move) {
-        // TODO: verify if position is available
 
         return boardService.updateBoard(move);
     }
 
     @GetMapping("/showboards")
     public Flux<Board> getAllBoards() {
+
         return boardService.getAllBoards().log();
     }
 
     @GetMapping("/showboard/{id}")
     public Mono<Board> getBoard(@PathVariable String id) {
+
         return boardService.findBoard(id).log();
     }
 
     @PostMapping("/deleteboards")
     @ResponseStatus(HttpStatus.OK)
     public Mono<Void> deleteAllBoard() {
+
         return boardService.deleteAllBoards().log();
     }
 }

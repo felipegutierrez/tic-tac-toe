@@ -2,11 +2,6 @@ package com.adsquare.tictactoe.controller;
 
 import static com.adsquare.tictactoe.Util.boardId02;
 import static com.adsquare.tictactoe.Util.getBoards;
-import static com.adsquare.tictactoe.Util.getScoreBoard02;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-
-import java.time.LocalTime;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +15,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.adsquare.tictactoe.domain.Board;
 import com.adsquare.tictactoe.domain.Move;
-import com.adsquare.tictactoe.domain.Score;
 import com.adsquare.tictactoe.repository.BoardRepository;
 import com.adsquare.tictactoe.util.Player;
 
