@@ -1,0 +1,5 @@
+spring:
+  config.activate.on-profile: local
+  data.mongodb:
+    uri: ${MONGODB_URI:mongodb://root:rootpassword@localhost:27017/local?authSource=admin}
+
