@@ -39,8 +39,8 @@ class BoardRepositoryIntTest {
     @BeforeEach
     void setUp() {
         var board =
-        boardRepository.saveAll(getBoards())
-            .blockLast(); // ensure to be synchronous because tests must start only after this. only used for test.
+            boardRepository.saveAll(getBoards())
+                .blockLast(); // ensure to be synchronous because tests must start only after this. only used for test.
     }
 
     @AfterEach
@@ -112,7 +112,7 @@ class BoardRepositoryIntTest {
     @Test
     void updateBoard() {
         // given
-        var newScore = new Score(null, Player.B.name(), 8, LocalTime.of(11, 10, 30));
+        var newScore = new Score(Player.B.name(), 8, LocalTime.of(11, 10, 30));
         Board board = boardRepository.findById(boardId02).block();
         assert board != null;
         board.setPlayerOnTurn(Player.A.name());

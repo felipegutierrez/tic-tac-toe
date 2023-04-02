@@ -63,10 +63,11 @@ public class BoardService {
             .flatMap(board -> {
                 if (board.getPlayerOnTurn().equals(move.getPlayer())) {
                     if (isPositionAvailable(board, move)) {
-                        board.setPlayerOnTurn(move.getPlayer());
-                        board.getScores().add(new Score(null, move.getPlayer(), move.getPosition(), LocalTime.now()));
+                        board.setPlayerOnTurn(getNextPlayer(board));
+                        board.getScores().add(new Score(move.getPlayer(), move.getPosition(), LocalTime.now()));
                         if (isBoardComplete(board)) {
                             board.setBoardComplete(true);
+                            board.setWinnerPlayer(getWinnerPlayer(board));
                         }
                         return boardRepository.save(board);
                     } else {
@@ -128,11 +129,27 @@ public class BoardService {
         return false;
     }
 
+    private String getWinnerPlayer(final Board board) {
+        if (isWinner(getPositions(board, Player.A))) {
+            return Player.A.name();
+        } else if (isWinner(getPositions(board, Player.B))) {
+            return Player.B.name();
+        }
+        return "";
+    }
+
     private List<Integer> getPositions(final Board board, final Player player) {
         return board.getScores()
             .stream().filter(score -> score.getPlayer().equals(player.name()))
             .map(Score::getPosition)
             .toList();
+    }
+
+    private String getNextPlayer(final Board board) {
+        if (board.getPlayerOnTurn().equals(Player.A.name())) {
+            return Player.B.name();
+        }
+        return Player.A.name();
     }
 
     private Player getRandomPlayer() {

@@ -44,63 +44,99 @@ public class Util {
         return new Board(boardId06, Player.A.name(), "", true, getScoreBoard06());
     }
 
+    /**
+     * |--A--|
+     * |B,2,A|
+     * |4,B,B|
+     * |A,A,A|
+     */
     public static List<Score> getScoreBoard01() {
         return List.of(
-            new Score(null, Player.A.name(), 3, LocalTime.of(10, 10, 0)),
-            new Score(null, Player.B.name(), 1, LocalTime.of(10, 10, 10)),
-            new Score(null, Player.A.name(), 7, LocalTime.of(10, 10, 20)),
-            new Score(null, Player.B.name(), 5, LocalTime.of(10, 10, 30)),
-            new Score(null, Player.A.name(), 9, LocalTime.of(10, 10, 40)),
-            new Score(null, Player.B.name(), 6, LocalTime.of(10, 10, 50)),
-            new Score(null, Player.A.name(), 8, LocalTime.of(10, 11, 0))
+            new Score(Player.A.name(), 3, LocalTime.of(10, 10, 0)),
+            new Score(Player.B.name(), 1, LocalTime.of(10, 10, 10)),
+            new Score(Player.A.name(), 7, LocalTime.of(10, 10, 20)),
+            new Score(Player.B.name(), 5, LocalTime.of(10, 10, 30)),
+            new Score(Player.A.name(), 9, LocalTime.of(10, 10, 40)),
+            new Score(Player.B.name(), 6, LocalTime.of(10, 10, 50)),
+            new Score(Player.A.name(), 8, LocalTime.of(10, 11, 0))
         );
     }
 
+    /**
+     * |-----|
+     * |B,2,3|
+     * |4,A,6|
+     * |A,8,9|
+     */
     public static List<Score> getScoreBoard02() {
         return List.of(
-            new Score(null, Player.A.name(), 5, LocalTime.of(11, 10, 0)),
-            new Score(null, Player.B.name(), 1, LocalTime.of(11, 10, 10)),
-            new Score(null, Player.A.name(), 7, LocalTime.of(11, 10, 20))
+            new Score(Player.A.name(), 5, LocalTime.of(11, 10, 0)),
+            new Score(Player.B.name(), 1, LocalTime.of(11, 10, 10)),
+            new Score(Player.A.name(), 7, LocalTime.of(11, 10, 20))
         );
     }
 
+    /**
+     * |-----|
+     * |B,2,3|
+     * |4,A,A|
+     * |7,8,9|
+     */
     public static List<Score> getScoreBoard03() {
         return List.of(
-            new Score(null, Player.A.name(), 5, LocalTime.of(12, 10, 0)),
-            new Score(null, Player.B.name(), 1, LocalTime.of(12, 10, 10)),
-            new Score(null, Player.A.name(), 7, LocalTime.of(12, 10, 20))
+            new Score(Player.A.name(), 5, LocalTime.of(12, 10, 0)),
+            new Score(Player.B.name(), 1, LocalTime.of(12, 10, 10)),
+            new Score(Player.A.name(), 6, LocalTime.of(12, 10, 20))
         );
     }
 
+    /**
+     * |--A--|
+     * |A,B,3|
+     * |A,A,B|
+     * |A,8,B|
+     */
     public static List<Score> getScoreBoard04() {
         return List.of(
-            new Score(null, Player.A.name(), 1, LocalTime.of(10, 10, 0)),
-            new Score(null, Player.B.name(), 2, LocalTime.of(10, 10, 10)),
-            new Score(null, Player.A.name(), 5, LocalTime.of(10, 10, 20)),
-            new Score(null, Player.B.name(), 9, LocalTime.of(10, 10, 30)),
-            new Score(null, Player.A.name(), 4, LocalTime.of(10, 10, 40)),
-            new Score(null, Player.B.name(), 6, LocalTime.of(10, 10, 50)),
-            new Score(null, Player.A.name(), 7, LocalTime.of(10, 11, 0))
+            new Score(Player.A.name(), 1, LocalTime.of(10, 10, 0)),
+            new Score(Player.B.name(), 2, LocalTime.of(10, 10, 10)),
+            new Score(Player.A.name(), 5, LocalTime.of(10, 10, 20)),
+            new Score(Player.B.name(), 9, LocalTime.of(10, 10, 30)),
+            new Score(Player.A.name(), 4, LocalTime.of(10, 10, 40)),
+            new Score(Player.B.name(), 6, LocalTime.of(10, 10, 50)),
+            new Score(Player.A.name(), 7, LocalTime.of(10, 11, 0))
         );
     }
 
+    /**
+     * |--B--|
+     * |B,B,B|
+     * |4,A,A|
+     * |A,8,9|
+     */
     public static List<Score> getScoreBoard05() {
         return List.of(
-            new Score(null, Player.A.name(), 5, LocalTime.of(10, 10, 0)),
-            new Score(null, Player.B.name(), 1, LocalTime.of(10, 10, 10)),
-            new Score(null, Player.A.name(), 7, LocalTime.of(10, 10, 20)),
-            new Score(null, Player.B.name(), 3, LocalTime.of(10, 10, 30)),
-            new Score(null, Player.A.name(), 6, LocalTime.of(10, 10, 40)),
-            new Score(null, Player.B.name(), 2, LocalTime.of(10, 10, 50))
+            new Score(Player.A.name(), 5, LocalTime.of(10, 10, 0)),
+            new Score(Player.B.name(), 1, LocalTime.of(10, 10, 10)),
+            new Score(Player.A.name(), 7, LocalTime.of(10, 10, 20)),
+            new Score(Player.B.name(), 3, LocalTime.of(10, 10, 30)),
+            new Score(Player.A.name(), 6, LocalTime.of(10, 10, 40)),
+            new Score(Player.B.name(), 2, LocalTime.of(10, 10, 50))
         );
     }
 
+    /**
+     * |-----|
+     * |B,2,B|
+     * |4,A,6|
+     * |A,8,9|
+     */
     public static List<Score> getScoreBoard06() {
         return List.of(
-            new Score(null, Player.A.name(), 5, LocalTime.of(10, 10, 0)),
-            new Score(null, Player.B.name(), 1, LocalTime.of(10, 10, 10)),
-            new Score(null, Player.A.name(), 7, LocalTime.of(10, 10, 20)),
-            new Score(null, Player.B.name(), 3, LocalTime.of(10, 10, 30))
+            new Score(Player.A.name(), 5, LocalTime.of(10, 10, 0)),
+            new Score(Player.B.name(), 1, LocalTime.of(10, 10, 10)),
+            new Score(Player.A.name(), 7, LocalTime.of(10, 10, 20)),
+            new Score(Player.B.name(), 3, LocalTime.of(10, 10, 30))
         );
     }
 }

@@ -37,8 +37,91 @@ docker ps
 docker-compose stop
 docker-compose down
 ```
-## Tests
+
+## Playing
+1. Create a new board and get the board ID
+```shell
+curl -i -H "Content-Type: application/json" -X POST http://localhost:8080/v1/startboard
 ```
+```json
+{"id":"6429b52726edc9050fa31a77","playerOnTurn":"A","winnerPlayer":"","boardComplete":false,"scores":[]}
+```
+2. Show all boards to recover you board ID, see who is the next player, check all positions and if there is a winner
+```shell
+curl http://localhost:8080/v1/showboards | json_pp -json_opt pretty,canonical
+```
+```json
+[
+   {
+      "boardComplete" : false,
+      "id" : "6429b52726edc9050fa31a77",
+      "playerOnTurn" : "A",
+      "scores" : [],
+      "winnerPlayer" : ""
+   }
+]
+```
+3. register a move using the `playerOnTurn : A`
+```shell
+curl -i \
+-d '{"boardId":"6429b52726edc9050fa31a77", "player": "A", "position": 3}' \
+-H "Content-Type: application/json" \
+-X PUT http://localhost:8080/v1/playboard
+```
+4. register a move using the `playerOnTurn : B`
+```shell
+curl -i \
+-d '{"boardId":"6429b52726edc9050fa31a77", "player": "B", "position": 1}' \
+-H "Content-Type: application/json" \
+-X PUT http://localhost:8080/v1/playboard
+```
+5. register a move using the `playerOnTurn : A`
+```shell
+curl -i \
+-d '{"boardId":"6429b52726edc9050fa31a77", "player": "A", "position": 7}' \
+-H "Content-Type: application/json" \
+-X PUT http://localhost:8080/v1/playboard
+```
+6. register a move using the `playerOnTurn : B`
+```shell
+curl -i \
+-d '{"boardId":"6429b52726edc9050fa31a77", "player": "B", "position": 5}' \
+-H "Content-Type: application/json" \
+-X PUT http://localhost:8080/v1/playboard
+```
+7. register a move using the `playerOnTurn : A`
+```shell
+curl -i \
+-d '{"boardId":"6429b52726edc9050fa31a77", "player": "A", "position": 9}' \
+-H "Content-Type: application/json" \
+-X PUT http://localhost:8080/v1/playboard
+```
+8. register a move using the `playerOnTurn : B`
+```shell
+curl -i \
+-d '{"boardId":"6429b52726edc9050fa31a77", "player": "B", "position": 6}' \
+-H "Content-Type: application/json" \
+-X PUT http://localhost:8080/v1/playboard
+```
+9. register a move using the `playerOnTurn : A`
+```shell
+curl -i \
+-d '{"boardId":"6429b52726edc9050fa31a77", "player": "A", "position": 8}' \
+-H "Content-Type: application/json" \
+-X PUT http://localhost:8080/v1/playboard
+```
+10. `playerOnTurn : A` wins and you cannot register further moves. Check the board again.
+```shell
+curl http://localhost:8080/v1/showboards | json_pp -json_opt pretty,canonical
+```
+11. delete all boards
+```shell
+curl -i \
+-H "Content-Type: application/json" \
+-X POST http://localhost:8080/v1/deleteboards
+```
+## Tests
+```shell
 ./gradlew test
 ```
 
