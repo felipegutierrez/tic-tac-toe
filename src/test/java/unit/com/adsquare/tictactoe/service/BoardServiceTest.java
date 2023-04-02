@@ -6,6 +6,7 @@ import static com.adsquare.tictactoe.Util.getBoard03;
 import static com.adsquare.tictactoe.Util.getBoard04;
 import static com.adsquare.tictactoe.Util.getBoard05;
 import static com.adsquare.tictactoe.Util.getBoard06;
+import static com.adsquare.tictactoe.Util.getBoard07;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -30,7 +31,8 @@ class BoardServiceTest {
         return Stream.of(
             Arguments.of(getBoard01()),
             Arguments.of(getBoard04()),
-            Arguments.of(getBoard05())
+            Arguments.of(getBoard05()),
+            Arguments.of(getBoard07())
         );
     }
 

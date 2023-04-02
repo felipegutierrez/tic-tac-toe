@@ -15,6 +15,7 @@ public class Util {
     public static final String boardId04 = "jkl";
     public static final String boardId05 = "mno";
     public static final String boardId06 = "pqr";
+    public static final String boardId07 = "stu";
 
     public static List<Board> getBoards() {
         return List.of(getBoard01(), getBoard02());
@@ -42,6 +43,10 @@ public class Util {
 
     public static Board getBoard06() {
         return new Board(boardId06, Player.A.name(), "", true, getScoreBoard06());
+    }
+
+    public static Board getBoard07() {
+        return new Board(boardId07, Player.B.name(), "", true, getScoreBoard07());
     }
 
     /**
@@ -137,6 +142,26 @@ public class Util {
             new Score(Player.B.name(), 1, LocalTime.of(10, 10, 10)),
             new Score(Player.A.name(), 7, LocalTime.of(10, 10, 20)),
             new Score(Player.B.name(), 3, LocalTime.of(10, 10, 30))
+        );
+    }
+
+    /**
+     * |-----|
+     * |A,B,A|
+     * |A,A,B|
+     * |B,A,B|
+     */
+    public static List<Score> getScoreBoard07() {
+        return List.of(
+            new Score(Player.A.name(), 1, LocalTime.of(10, 10, 0)),
+            new Score(Player.B.name(), 2, LocalTime.of(10, 10, 10)),
+            new Score(Player.A.name(), 5, LocalTime.of(10, 10, 20)),
+            new Score(Player.B.name(), 9, LocalTime.of(10, 10, 30)),
+            new Score(Player.A.name(), 4, LocalTime.of(10, 10, 40)),
+            new Score(Player.B.name(), 6, LocalTime.of(10, 10, 50)),
+            new Score(Player.A.name(), 8, LocalTime.of(10, 11, 0)),
+            new Score(Player.B.name(), 7, LocalTime.of(10, 11, 10)),
+            new Score(Player.A.name(), 3, LocalTime.of(10, 11, 20))
         );
     }
 }
