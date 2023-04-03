@@ -5,6 +5,7 @@ import static com.adsquare.tictactoe.util.TicTacToeRules.completedPositions;
 import static com.adsquare.tictactoe.util.TicTacToeRules.getNextPlayer;
 import static com.adsquare.tictactoe.util.TicTacToeRules.getRandomPlayer;
 
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.logging.log4j.util.Strings;
@@ -54,11 +55,13 @@ public class BoardService {
                 if (!isPositionAvailable(board, move)) {
                     return Mono.error(new Exception("Position " + move.position() + " is not available"));
                 }
-                board.setPlayerOnTurn(getNextPlayer(board));
                 board.getScores().add(new Score(move.player(), move.position()));
                 if (isBoardComplete(board)) {
+                    board.setPlayerOnTurn(Strings.EMPTY);
                     board.setBoardComplete(true);
                     board.setWinnerPlayer(getWinnerPlayer(board));
+                } else {
+                    board.setPlayerOnTurn(getNextPlayer(board));
                 }
                 return boardRepository.save(board);
             })
@@ -101,7 +104,7 @@ public class BoardService {
 
     private boolean isWinner(final List<Integer> listPositions) {
         for (List<Integer> completedPosition : completedPositions) {
-            var result = listPositions.containsAll(completedPosition);
+            var result = new HashSet<>(listPositions).containsAll(completedPosition);
             if (result) {
                 return true;
             }
