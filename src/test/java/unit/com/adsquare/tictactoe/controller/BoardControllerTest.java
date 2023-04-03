@@ -40,7 +40,10 @@ class BoardControllerTest {
 
     private static Stream<Arguments> getCompletedBoards() {
         return Stream.of(
-            Arguments.of(new Move(boardId02, Strings.EMPTY, 0), "player must be present, position must be higher or equal to 1"),
+            Arguments.of(
+                new Move(boardId02, Strings.EMPTY, 0),
+                "player must be present, position must be higher or equal to 1"
+            ),
             Arguments.of(new Move(boardId02, Strings.EMPTY, 1), "player must be present"),
             Arguments.of(new Move(boardId02, "A", 0), "position must be higher or equal to 1"),
             Arguments.of(new Move(boardId02, "A", 10), "position must be lower or equal to 9"),
@@ -65,6 +68,7 @@ class BoardControllerTest {
             .expectBody(String.class)
             .consumeWith(stringEntityExchangeResult -> {
                 final String responseBody = stringEntityExchangeResult.getResponseBody();
+                System.out.println(responseBody);
                 assertEquals(expectedErrorMsg, responseBody);
             });
     }
