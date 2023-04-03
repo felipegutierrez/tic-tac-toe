@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.adsquare.tictactoe.domain.Board;
 import com.adsquare.tictactoe.domain.Move;
 import com.adsquare.tictactoe.domain.Score;
+import com.adsquare.tictactoe.exception.BoardException;
 import com.adsquare.tictactoe.repository.BoardRepository;
 import com.adsquare.tictactoe.util.Player;
 import reactor.core.publisher.Flux;
@@ -50,10 +51,10 @@ public class BoardService {
         return findBoard(move.boardId())
             .flatMap(board -> {
                 if (!board.getPlayerOnTurn().equals(move.player())) {
-                    return Mono.error(new Exception("It is not the turn of player " + move.player()));
+                    return Mono.error(new BoardException("It is not the turn of player " + move.player()));
                 }
                 if (!isPositionAvailable(board, move)) {
-                    return Mono.error(new Exception("Position " + move.position() + " is not available"));
+                    return Mono.error(new BoardException("Position " + move.position() + " is not available"));
                 }
                 board.getScores().add(new Score(move.player(), move.position()));
                 if (isBoardComplete(board)) {

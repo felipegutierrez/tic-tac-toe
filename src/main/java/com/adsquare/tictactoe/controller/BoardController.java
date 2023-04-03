@@ -41,7 +41,8 @@ public class BoardController {
 
         return boardService.updateBoard(move)
             .map(ResponseEntity.ok()::body)
-            .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()))
+            .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND))
+            .onErrorReturn(new ResponseEntity<>(HttpStatus.BAD_REQUEST))
             .log();
     }
 
@@ -54,7 +55,8 @@ public class BoardController {
     @GetMapping("/showboard/{id}")
     public Mono<Board> getBoard(@PathVariable String id) {
 
-        return boardService.findBoard(id).log();
+        return boardService.findBoard(id)
+            .log();
     }
 
     @PostMapping("/deleteboards")
