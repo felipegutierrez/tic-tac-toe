@@ -14,7 +14,6 @@
       - board_id (int, FK from board)
       - turn (char, o or x user): the user who recorded this position
       - position (int, 1 to 9): the position set by the user
-      - timestamp: to get the last player and the next turn
 
 ```text
 # available positions
@@ -39,16 +38,16 @@ id, turn, winner, complete
 1 , o   ,       , false
 
 table scores
-id, board_id, turn, position, timestamp
-0 , 0       , x   , 3       , 0000001
-1 , 0       , o   , 1       , 0000002
-2 , 0       , x   , 7       , 0000003
-3 , 0       , o   , 5       , 0000004
-4 , 0       , x   , 9       , 0000005
-5 , 0       , o   , 6       , 0000006
-6 , 0       , x   , 8       , 0000007
-7 , 1       , o   , 5       , 0000008
-8 , 1       , x   , 1       , 0000009
+id, board_id, turn, position
+0 , 0       , x   , 3       
+1 , 0       , o   , 1       
+2 , 0       , x   , 7       
+3 , 0       , o   , 5       
+4 , 0       , x   , 9       
+5 , 0       , o   , 6       
+6 , 0       , x   , 8       
+7 , 1       , o   , 5       
+8 , 1       , x   , 1       
 ....
 ```
 - controller model:
@@ -78,7 +77,7 @@ id, board_id, turn, position, timestamp
             - check if the `turn` matches with the given user.
             - check if the position is available
               - TRUE:
-                - creates a row in `score` table with `board_id`, `turn`, `position` (1 to 9), current timestamp
+                - creates a row in `score` table with `board_id`, `turn`, `position` (1 to 9)
               - FALSE:
                 - shows: position is occupied or does not exist
                 - invites the same player to try again

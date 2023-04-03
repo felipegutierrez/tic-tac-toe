@@ -1,6 +1,5 @@
 package com.adsquare.tictactoe.service;
 
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Random;
 
@@ -64,7 +63,7 @@ public class BoardService {
                 if (board.getPlayerOnTurn().equals(move.getPlayer())) {
                     if (isPositionAvailable(board, move)) {
                         board.setPlayerOnTurn(getNextPlayer(board));
-                        board.getScores().add(new Score(move.getPlayer(), move.getPosition(), LocalTime.now()));
+                        board.getScores().add(new Score(move.getPlayer(), move.getPosition()));
                         if (isBoardComplete(board)) {
                             board.setBoardComplete(true);
                             board.setWinnerPlayer(getWinnerPlayer(board));
