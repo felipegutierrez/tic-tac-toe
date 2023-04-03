@@ -107,7 +107,7 @@ public class BoardService {
         }
         return board.getScores()
             .stream()
-            .filter(score -> score.getPosition().equals(move.getPosition()))
+            .filter(score -> score.position().equals(move.getPosition()))
             .findFirst()
             .isEmpty();
     }
@@ -161,8 +161,8 @@ public class BoardService {
 
     private List<Integer> getPositions(final Board board, final Player player) {
         return board.getScores()
-            .stream().filter(score -> score.getPlayer().equals(player.name()))
-            .map(Score::getPosition)
+            .stream().filter(score -> score.player().equals(player.name()))
+            .map(Score::position)
             .toList();
     }
 
