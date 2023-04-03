@@ -1,7 +1,12 @@
 package com.adsquare.tictactoe.service;
 
+import static com.adsquare.tictactoe.util.TicTacToeRules.availablePositions;
+import static com.adsquare.tictactoe.util.TicTacToeRules.completedPositions;
+import static com.adsquare.tictactoe.util.TicTacToeRules.getNextPlayer;
+import static com.adsquare.tictactoe.util.TicTacToeRules.getRandomPlayer;
+
+import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
@@ -9,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.adsquare.tictactoe.domain.Board;
 import com.adsquare.tictactoe.domain.Move;
 import com.adsquare.tictactoe.domain.Score;
+import com.adsquare.tictactoe.exception.BoardException;
 import com.adsquare.tictactoe.repository.BoardRepository;
 import com.adsquare.tictactoe.util.Player;
 import reactor.core.publisher.Flux;
@@ -17,33 +23,16 @@ import reactor.core.publisher.Mono;
 @Service
 public class BoardService {
 
-    private final Random random;
-    private final List<Integer> availablePositions;
-    private final List<List<Integer>> completedPositions;
     private final BoardRepository boardRepository;
 
     public BoardService(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
-        this.availablePositions = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
-        this.completedPositions = List.of(
-            // horizontal
-            List.of(1, 2, 3),
-            List.of(4, 5, 6),
-            List.of(7, 8, 9),
-            // vertical
-            List.of(1, 4, 7),
-            List.of(2, 5, 8),
-            List.of(3, 6, 9),
-            // diagonal
-            List.of(1, 5, 9),
-            List.of(3, 5, 7)
-        );
-        this.random = new Random();
     }
 
     public Mono<Board> startNewBoard() {
-        var board = new Board(null, getRandomPlayer().name(), Strings.EMPTY, false, List.of());
-        return boardRepository.save(board);
+        return boardRepository.save(
+            new Board(null, getRandomPlayer().name(), Strings.EMPTY, false, List.of())
+        );
     }
 
     public Mono<Void> deleteAllBoards() {
@@ -62,31 +51,20 @@ public class BoardService {
         return findBoard(move.boardId())
             .flatMap(board -> {
                 if (!board.getPlayerOnTurn().equals(move.player())) {
-                    return Mono.error(new Exception("It is not the turn of player " + move.player()));
+                    return Mono.error(new BoardException("It is not the turn of player " + move.player()));
                 }
                 if (!isPositionAvailable(board, move)) {
-                    return Mono.error(new Exception("Position " + move.position() + " is not available"));
+                    return Mono.error(new BoardException("Position " + move.position() + " is not available"));
                 }
-                board.setPlayerOnTurn(getNextPlayer(board));
                 board.getScores().add(new Score(move.player(), move.position()));
                 if (isBoardComplete(board)) {
+                    board.setPlayerOnTurn(Strings.EMPTY);
                     board.setBoardComplete(true);
                     board.setWinnerPlayer(getWinnerPlayer(board));
+                } else {
+                    board.setPlayerOnTurn(getNextPlayer(board));
                 }
                 return boardRepository.save(board);
-            })
-            .log();
-    }
-
-    /**
-     * Terminate all boards by setting "complete = TRUE" regardless if the game was finished
-     */
-    public Flux<Board> terminateAllBoards() {
-        return boardRepository.findAll()
-            .filter(b -> b.getBoardComplete().equals(Boolean.FALSE))
-            .flatMap(b -> {
-                b.setBoardComplete(Boolean.TRUE);
-                return boardRepository.save(b);
             })
             .log();
     }
@@ -122,12 +100,12 @@ public class BoardService {
         var listPositionsPlayerB = getPositions(board, Player.B);
 
         return isWinner(listPositionsPlayerA) || isWinner(listPositionsPlayerB) ||
-            noMovesLeft(listPositionsPlayerA, listPositionsPlayerB);
+            !areThereMovesLeft(listPositionsPlayerA, listPositionsPlayerB);
     }
 
     private boolean isWinner(final List<Integer> listPositions) {
         for (List<Integer> completedPosition : completedPositions) {
-            var result = listPositions.containsAll(completedPosition);
+            var result = new HashSet<>(listPositions).containsAll(completedPosition);
             if (result) {
                 return true;
             }
@@ -148,14 +126,14 @@ public class BoardService {
      * verifies if all positions on the board are occupied by summing up all the position values
      * (1+2+3+4+5+6+7+8+9 = 45)
      *
-     * @param listPositionsPlayerA
-     * @param listPositionsPlayerB
+     * @param positionsPlayerA
+     * @param positionsPlayerB
      * @return
      */
-    private boolean noMovesLeft(final List<Integer> listPositionsPlayerA, final List<Integer> listPositionsPlayerB) {
-        var res01 = listPositionsPlayerA.stream().reduce(Integer::sum);
-        var res02 = listPositionsPlayerB.stream().reduce(Integer::sum);
-        return ((res01.orElse(0) + res02.orElse(0)) == 45);
+    private boolean areThereMovesLeft(final List<Integer> positionsPlayerA, final List<Integer> positionsPlayerB) {
+        var res01 = positionsPlayerA.stream().reduce(Integer::sum);
+        var res02 = positionsPlayerB.stream().reduce(Integer::sum);
+        return ((res01.orElse(0) + res02.orElse(0)) < 45);
     }
 
     private List<Integer> getPositions(final Board board, final Player player) {
@@ -163,17 +141,5 @@ public class BoardService {
             .stream().filter(score -> score.player().equals(player.name()))
             .map(Score::position)
             .toList();
-    }
-
-    private String getNextPlayer(final Board board) {
-        if (board.getPlayerOnTurn().equals(Player.A.name())) {
-            return Player.B.name();
-        }
-        return Player.A.name();
-    }
-
-    private Player getRandomPlayer() {
-        int randomBinary = random.nextInt(1000) % 2;
-        return (randomBinary == 0 ? Player.A : Player.B);
     }
 }

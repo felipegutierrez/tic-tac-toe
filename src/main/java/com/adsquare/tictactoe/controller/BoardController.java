@@ -33,8 +33,6 @@ public class BoardController {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Board> startBoard() {
 
-        boardService.terminateAllBoards();
-
         return boardService.startNewBoard().log();
     }
 
@@ -43,7 +41,7 @@ public class BoardController {
 
         return boardService.updateBoard(move)
             .map(ResponseEntity.ok()::body)
-            .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()))
+            .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND))
             .log();
     }
 
@@ -56,7 +54,8 @@ public class BoardController {
     @GetMapping("/showboard/{id}")
     public Mono<Board> getBoard(@PathVariable String id) {
 
-        return boardService.findBoard(id).log();
+        return boardService.findBoard(id)
+            .log();
     }
 
     @PostMapping("/deleteboards")
