@@ -3,6 +3,7 @@ package com.adsquare.tictactoe.service;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
 import com.adsquare.tictactoe.domain.Board;
@@ -41,7 +42,7 @@ public class BoardService {
     }
 
     public Mono<Board> startNewBoard() {
-        var board = new Board(null, getRandomPlayer().name(), "", false, List.of());
+        var board = new Board(null, getRandomPlayer().name(), Strings.EMPTY, false, List.of());
         return boardRepository.save(board);
     }
 
@@ -60,21 +61,19 @@ public class BoardService {
     public Mono<Board> updateBoard(Move move) {
         return findBoard(move.boardId())
             .flatMap(board -> {
-                if (board.getPlayerOnTurn().equals(move.player())) {
-                    if (isPositionAvailable(board, move)) {
-                        board.setPlayerOnTurn(getNextPlayer(board));
-                        board.getScores().add(new Score(move.player(), move.position()));
-                        if (isBoardComplete(board)) {
-                            board.setBoardComplete(true);
-                            board.setWinnerPlayer(getWinnerPlayer(board));
-                        }
-                        return boardRepository.save(board);
-                    } else {
-                        return Mono.error(new Exception("Position " + move.position() + " is not available"));
-                    }
-                } else {
+                if (!board.getPlayerOnTurn().equals(move.player())) {
                     return Mono.error(new Exception("It is not the turn of player " + move.player()));
                 }
+                if (!isPositionAvailable(board, move)) {
+                    return Mono.error(new Exception("Position " + move.position() + " is not available"));
+                }
+                board.setPlayerOnTurn(getNextPlayer(board));
+                board.getScores().add(new Score(move.player(), move.position()));
+                if (isBoardComplete(board)) {
+                    board.setBoardComplete(true);
+                    board.setWinnerPlayer(getWinnerPlayer(board));
+                }
+                return boardRepository.save(board);
             })
             .log();
     }
@@ -142,7 +141,7 @@ public class BoardService {
         } else if (isWinner(getPositions(board, Player.B))) {
             return Player.B.name();
         }
-        return "";
+        return Strings.EMPTY;
     }
 
     /**
