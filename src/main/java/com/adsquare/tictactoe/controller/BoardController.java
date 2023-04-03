@@ -42,7 +42,6 @@ public class BoardController {
         return boardService.updateBoard(move)
             .map(ResponseEntity.ok()::body)
             .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND))
-            .onErrorReturn(new ResponseEntity<>(HttpStatus.BAD_REQUEST))
             .log();
     }
 
