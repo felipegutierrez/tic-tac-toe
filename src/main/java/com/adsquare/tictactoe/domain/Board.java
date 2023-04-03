@@ -1,6 +1,6 @@
 package com.adsquare.tictactoe.domain;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -24,5 +24,5 @@ public class Board {
 
     private Boolean boardComplete;
 
-    private Collection<Score> scores;
+    private List<Score> scores;
 }
