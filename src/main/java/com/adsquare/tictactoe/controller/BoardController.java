@@ -33,8 +33,6 @@ public class BoardController {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Board> startBoard() {
 
-        boardService.terminateAllBoards();
-
         return boardService.startNewBoard().log();
     }
 

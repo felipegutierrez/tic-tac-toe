@@ -79,19 +79,6 @@ public class BoardService {
     }
 
     /**
-     * Terminate all boards by setting "complete = TRUE" regardless if the game was finished
-     */
-    public Flux<Board> terminateAllBoards() {
-        return boardRepository.findAll()
-            .filter(b -> b.getBoardComplete().equals(Boolean.FALSE))
-            .flatMap(b -> {
-                b.setBoardComplete(Boolean.TRUE);
-                return boardRepository.save(b);
-            })
-            .log();
-    }
-
-    /**
      * Verifies if a given position is available in the giver board
      *
      * @param board
