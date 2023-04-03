@@ -1,7 +1,11 @@
 package com.adsquare.tictactoe.service;
 
+import static com.adsquare.tictactoe.util.TicTacToeRules.availablePositions;
+import static com.adsquare.tictactoe.util.TicTacToeRules.completedPositions;
+import static com.adsquare.tictactoe.util.TicTacToeRules.getNextPlayer;
+import static com.adsquare.tictactoe.util.TicTacToeRules.getRandomPlayer;
+
 import java.util.List;
-import java.util.Random;
 
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
@@ -17,33 +21,16 @@ import reactor.core.publisher.Mono;
 @Service
 public class BoardService {
 
-    private final Random random;
-    private final List<Integer> availablePositions;
-    private final List<List<Integer>> completedPositions;
     private final BoardRepository boardRepository;
 
     public BoardService(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
-        this.availablePositions = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
-        this.completedPositions = List.of(
-            // horizontal
-            List.of(1, 2, 3),
-            List.of(4, 5, 6),
-            List.of(7, 8, 9),
-            // vertical
-            List.of(1, 4, 7),
-            List.of(2, 5, 8),
-            List.of(3, 6, 9),
-            // diagonal
-            List.of(1, 5, 9),
-            List.of(3, 5, 7)
-        );
-        this.random = new Random();
     }
 
     public Mono<Board> startNewBoard() {
-        var board = new Board(null, getRandomPlayer().name(), Strings.EMPTY, false, List.of());
-        return boardRepository.save(board);
+        return boardRepository.save(
+            new Board(null, getRandomPlayer().name(), Strings.EMPTY, false, List.of())
+        );
     }
 
     public Mono<Void> deleteAllBoards() {
@@ -150,17 +137,5 @@ public class BoardService {
             .stream().filter(score -> score.player().equals(player.name()))
             .map(Score::position)
             .toList();
-    }
-
-    private String getNextPlayer(final Board board) {
-        if (board.getPlayerOnTurn().equals(Player.A.name())) {
-            return Player.B.name();
-        }
-        return Player.A.name();
-    }
-
-    private Player getRandomPlayer() {
-        int randomBinary = random.nextInt(1000) % 2;
-        return (randomBinary == 0 ? Player.A : Player.B);
     }
 }
