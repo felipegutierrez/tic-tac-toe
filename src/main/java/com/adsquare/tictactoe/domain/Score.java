@@ -1,15 +1,4 @@
 package com.adsquare.tictactoe.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Score {
-
-    private String player;
-
-    private Integer position;
+public record Score(String player, Integer position) {
 }

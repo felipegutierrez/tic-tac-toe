@@ -107,6 +107,19 @@ class BoardControllerIntTest {
     }
 
     @Test
+    void playNonExistingBoard() {
+        // given
+        var move = new Move("non-existing-board", Player.B.name(), 3);
+        // when // then
+        webTestClient.put()
+            .uri(PLAY_BOARD)
+            .bodyValue(move)
+            .exchange()
+            .expectStatus()
+            .isNotFound();
+    }
+
+    @Test
     void deleteAllBoards() {
         // when // then
         webTestClient.post()
