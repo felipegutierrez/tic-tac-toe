@@ -11,6 +11,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,9 +37,8 @@ class BoardRepositoryIntTest {
 
     @BeforeEach
     void setUp() {
-        var board =
-            boardRepository.saveAll(getBoards())
-                .blockLast(); // ensure to be synchronous because tests must start only after this. only used for test.
+        boardRepository.saveAll(getBoards())
+            .blockLast(); // ensure to be synchronous because tests must start only after this. only used for test.
     }
 
     @AfterEach
@@ -87,7 +87,7 @@ class BoardRepositoryIntTest {
     @Test
     void saveBoard() {
         // given
-        var board = new Board(null, Player.B.name(), "", false, getScoreBoard03());
+        var board = new Board(null, Player.B.name(), Strings.EMPTY, false, getScoreBoard03());
 
         // when
         final Mono<Board> boardMono = boardRepository.save(board).log();
@@ -97,7 +97,7 @@ class BoardRepositoryIntTest {
             .assertNext(b -> {
                 assertNotNull(b.getId());
                 assertEquals(Player.B.name(), b.getPlayerOnTurn());
-                assertEquals("", b.getWinnerPlayer());
+                assertEquals(Strings.EMPTY, b.getWinnerPlayer());
                 assertEquals(false, b.getBoardComplete());
                 assertEquals(3, b.getScores().size());
                 assertThat(b.getScores(), hasItem(getScoreBoard03().get(0)));
@@ -112,7 +112,6 @@ class BoardRepositoryIntTest {
         // given
         var newScore = new Score(Player.B.name(), 8);
         Board board = boardRepository.findById(boardId02).block();
-        assert board != null;
         board.setPlayerOnTurn(Player.A.name());
         board.getScores().add(newScore);
 
@@ -124,7 +123,7 @@ class BoardRepositoryIntTest {
             .assertNext(b -> {
                 assertNotNull(b.getId());
                 assertEquals(Player.A.name(), b.getPlayerOnTurn());
-                assertEquals("", b.getWinnerPlayer());
+                assertEquals(Strings.EMPTY, b.getWinnerPlayer());
                 assertEquals(false, b.getBoardComplete());
                 assertEquals(4, b.getScores().size());
                 assertThat(b.getScores(), hasItem(getScoreBoard02().get(0)));

@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.stream.Stream;
 
+import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -39,11 +40,11 @@ class BoardControllerTest {
 
     private static Stream<Arguments> getCompletedBoards() {
         return Stream.of(
-            Arguments.of(new Move(boardId02, "", 0), "player must be present, position must be higher or equal to 1"),
-            Arguments.of(new Move(boardId02, "", 1), "player must be present"),
+            Arguments.of(new Move(boardId02, Strings.EMPTY, 0), "player must be present, position must be higher or equal to 1"),
+            Arguments.of(new Move(boardId02, Strings.EMPTY, 1), "player must be present"),
             Arguments.of(new Move(boardId02, "A", 0), "position must be higher or equal to 1"),
             Arguments.of(new Move(boardId02, "A", 10), "position must be lower or equal to 9"),
-            Arguments.of(new Move("", "A", 9), "boardId must be present")
+            Arguments.of(new Move(Strings.EMPTY, "A", 9), "boardId must be present")
         );
     }
 

@@ -2,6 +2,8 @@ package com.adsquare.tictactoe;
 
 import java.util.List;
 
+import org.apache.logging.log4j.util.Strings;
+
 import com.adsquare.tictactoe.domain.Board;
 import com.adsquare.tictactoe.domain.Score;
 import com.adsquare.tictactoe.util.Player;
@@ -31,11 +33,11 @@ public class Util {
     }
 
     public static Board getBoard02() {
-        return new Board(boardId02, Player.B.name(), "", false, getScoreBoard02());
+        return new Board(boardId02, Player.B.name(), Strings.EMPTY, false, getScoreBoard02());
     }
 
     public static Board getBoard03() {
-        return new Board(boardId03, Player.B.name(), "", false, getScoreBoard03());
+        return new Board(boardId03, Player.B.name(), Strings.EMPTY, false, getScoreBoard03());
     }
 
     public static Board getBoard04() {
@@ -47,11 +49,11 @@ public class Util {
     }
 
     public static Board getBoard06() {
-        return new Board(boardId06, Player.A.name(), "", true, getScoreBoard06());
+        return new Board(boardId06, Player.A.name(), Strings.EMPTY, true, getScoreBoard06());
     }
 
     public static Board getBoard07() {
-        return new Board(boardId07, Player.B.name(), "", true, getScoreBoard07());
+        return new Board(boardId07, Player.B.name(), Strings.EMPTY, true, getScoreBoard07());
     }
 
     /**

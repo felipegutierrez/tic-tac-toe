@@ -8,6 +8,7 @@ import static com.adsquare.tictactoe.Util.START_BOARD;
 import static com.adsquare.tictactoe.Util.boardId02;
 import static com.adsquare.tictactoe.Util.getBoards;
 
+import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,12 +60,11 @@ class BoardControllerIntTest {
             .expectBody(Board.class)
             .consumeWith(boardEntityExchangeResult -> {
                 var newBoard = boardEntityExchangeResult.getResponseBody();
-                assert newBoard != null;
                 assert newBoard.getId() != null;
                 assert !newBoard.getBoardComplete();
                 assert (newBoard.getPlayerOnTurn().equals(Player.A.name()) ||
                     newBoard.getPlayerOnTurn().equals(Player.B.name()));
-                assert newBoard.getWinnerPlayer().equals("");
+                assert newBoard.getWinnerPlayer().equals(Strings.EMPTY);
                 assert newBoard.getScores().size() == 0;
             });
     }
