@@ -9,22 +9,29 @@ import static com.adsquare.tictactoe.Util.getBoard06;
 import static com.adsquare.tictactoe.Util.getBoard07;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
 
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.adsquare.tictactoe.domain.Board;
 import com.adsquare.tictactoe.repository.BoardRepository;
 
+@ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BoardServiceTest {
 
+    @MockBean
+    private BoardRepository boardRepository;
+
+    @InjectMocks
     private BoardService boardService;
 
     private static Stream<Arguments> getCompletedBoards() {
@@ -42,11 +49,6 @@ class BoardServiceTest {
             Arguments.of(getBoard03()),
             Arguments.of(getBoard06())
         );
-    }
-
-    @BeforeEach
-    void setUp() {
-        boardService = new BoardService(mock(BoardRepository.class));
     }
 
     @ParameterizedTest
