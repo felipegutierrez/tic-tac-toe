@@ -58,22 +58,22 @@ public class BoardService {
     }
 
     public Mono<Board> updateBoard(Move move) {
-        return findBoard(move.getBoardId())
+        return findBoard(move.boardId())
             .flatMap(board -> {
-                if (board.getPlayerOnTurn().equals(move.getPlayer())) {
+                if (board.getPlayerOnTurn().equals(move.player())) {
                     if (isPositionAvailable(board, move)) {
                         board.setPlayerOnTurn(getNextPlayer(board));
-                        board.getScores().add(new Score(move.getPlayer(), move.getPosition()));
+                        board.getScores().add(new Score(move.player(), move.position()));
                         if (isBoardComplete(board)) {
                             board.setBoardComplete(true);
                             board.setWinnerPlayer(getWinnerPlayer(board));
                         }
                         return boardRepository.save(board);
                     } else {
-                        return Mono.error(new Exception("Position " + move.getPosition() + " is not available"));
+                        return Mono.error(new Exception("Position " + move.position() + " is not available"));
                     }
                 } else {
-                    return Mono.error(new Exception("It is not the turn of player " + move.getPlayer()));
+                    return Mono.error(new Exception("It is not the turn of player " + move.player()));
                 }
             })
             .log();
@@ -100,14 +100,14 @@ public class BoardService {
      * @return
      */
     protected boolean isPositionAvailable(final Board board, final Move move) {
-        if (!availablePositions.contains(move.getPosition()) ||
+        if (!availablePositions.contains(move.position()) ||
             Boolean.TRUE.equals(board.getBoardComplete()) ||
-            !board.getPlayerOnTurn().equals(move.getPlayer())) {
+            !board.getPlayerOnTurn().equals(move.player())) {
             return false;
         }
         return board.getScores()
             .stream()
-            .filter(score -> score.position().equals(move.getPosition()))
+            .filter(score -> score.position().equals(move.position()))
             .findFirst()
             .isEmpty();
     }
