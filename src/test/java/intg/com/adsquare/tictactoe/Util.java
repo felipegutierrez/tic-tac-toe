@@ -1,6 +1,5 @@
 package com.adsquare.tictactoe;
 
-import java.time.LocalTime;
 import java.util.List;
 
 import com.adsquare.tictactoe.domain.Board;
@@ -8,6 +7,12 @@ import com.adsquare.tictactoe.domain.Score;
 import com.adsquare.tictactoe.util.Player;
 
 public class Util {
+
+    public static final String START_BOARD = "/v1/startboard";
+    public static final String SHOW_BOARDS = "/v1/showboards";
+    public static final String SHOW_BOARD = "/v1/showboard";
+    public static final String DELETE_ALL_BOARD = "/v1/deleteboards";
+    public static final String PLAY_BOARD = "/v1/playboard";
 
     public static final String boardId01 = "abc";
     public static final String boardId02 = "def";
@@ -57,13 +62,13 @@ public class Util {
      */
     public static List<Score> getScoreBoard01() {
         return List.of(
-            new Score(Player.A.name(), 3, LocalTime.of(10, 10, 0)),
-            new Score(Player.B.name(), 1, LocalTime.of(10, 10, 10)),
-            new Score(Player.A.name(), 7, LocalTime.of(10, 10, 20)),
-            new Score(Player.B.name(), 5, LocalTime.of(10, 10, 30)),
-            new Score(Player.A.name(), 9, LocalTime.of(10, 10, 40)),
-            new Score(Player.B.name(), 6, LocalTime.of(10, 10, 50)),
-            new Score(Player.A.name(), 8, LocalTime.of(10, 11, 0))
+            new Score(Player.A.name(), 3),
+            new Score(Player.B.name(), 1),
+            new Score(Player.A.name(), 7),
+            new Score(Player.B.name(), 5),
+            new Score(Player.A.name(), 9),
+            new Score(Player.B.name(), 6),
+            new Score(Player.A.name(), 8)
         );
     }
 
@@ -75,9 +80,9 @@ public class Util {
      */
     public static List<Score> getScoreBoard02() {
         return List.of(
-            new Score(Player.A.name(), 5, LocalTime.of(11, 10, 0)),
-            new Score(Player.B.name(), 1, LocalTime.of(11, 10, 10)),
-            new Score(Player.A.name(), 7, LocalTime.of(11, 10, 20))
+            new Score(Player.A.name(), 5),
+            new Score(Player.B.name(), 1),
+            new Score(Player.A.name(), 7)
         );
     }
 
@@ -89,9 +94,9 @@ public class Util {
      */
     public static List<Score> getScoreBoard03() {
         return List.of(
-            new Score(Player.A.name(), 5, LocalTime.of(12, 10, 0)),
-            new Score(Player.B.name(), 1, LocalTime.of(12, 10, 10)),
-            new Score(Player.A.name(), 6, LocalTime.of(12, 10, 20))
+            new Score(Player.A.name(), 5),
+            new Score(Player.B.name(), 1),
+            new Score(Player.A.name(), 6)
         );
     }
 
@@ -103,13 +108,13 @@ public class Util {
      */
     public static List<Score> getScoreBoard04() {
         return List.of(
-            new Score(Player.A.name(), 1, LocalTime.of(10, 10, 0)),
-            new Score(Player.B.name(), 2, LocalTime.of(10, 10, 10)),
-            new Score(Player.A.name(), 5, LocalTime.of(10, 10, 20)),
-            new Score(Player.B.name(), 9, LocalTime.of(10, 10, 30)),
-            new Score(Player.A.name(), 4, LocalTime.of(10, 10, 40)),
-            new Score(Player.B.name(), 6, LocalTime.of(10, 10, 50)),
-            new Score(Player.A.name(), 7, LocalTime.of(10, 11, 0))
+            new Score(Player.A.name(), 1),
+            new Score(Player.B.name(), 2),
+            new Score(Player.A.name(), 5),
+            new Score(Player.B.name(), 9),
+            new Score(Player.A.name(), 4),
+            new Score(Player.B.name(), 6),
+            new Score(Player.A.name(), 7)
         );
     }
 
@@ -121,12 +126,12 @@ public class Util {
      */
     public static List<Score> getScoreBoard05() {
         return List.of(
-            new Score(Player.A.name(), 5, LocalTime.of(10, 10, 0)),
-            new Score(Player.B.name(), 1, LocalTime.of(10, 10, 10)),
-            new Score(Player.A.name(), 7, LocalTime.of(10, 10, 20)),
-            new Score(Player.B.name(), 3, LocalTime.of(10, 10, 30)),
-            new Score(Player.A.name(), 6, LocalTime.of(10, 10, 40)),
-            new Score(Player.B.name(), 2, LocalTime.of(10, 10, 50))
+            new Score(Player.A.name(), 5),
+            new Score(Player.B.name(), 1),
+            new Score(Player.A.name(), 7),
+            new Score(Player.B.name(), 3),
+            new Score(Player.A.name(), 6),
+            new Score(Player.B.name(), 2)
         );
     }
 
@@ -138,10 +143,10 @@ public class Util {
      */
     public static List<Score> getScoreBoard06() {
         return List.of(
-            new Score(Player.A.name(), 5, LocalTime.of(10, 10, 0)),
-            new Score(Player.B.name(), 1, LocalTime.of(10, 10, 10)),
-            new Score(Player.A.name(), 7, LocalTime.of(10, 10, 20)),
-            new Score(Player.B.name(), 3, LocalTime.of(10, 10, 30))
+            new Score(Player.A.name(), 5),
+            new Score(Player.B.name(), 1),
+            new Score(Player.A.name(), 7),
+            new Score(Player.B.name(), 3)
         );
     }
 
@@ -153,15 +158,15 @@ public class Util {
      */
     public static List<Score> getScoreBoard07() {
         return List.of(
-            new Score(Player.A.name(), 1, LocalTime.of(10, 10, 0)),
-            new Score(Player.B.name(), 2, LocalTime.of(10, 10, 10)),
-            new Score(Player.A.name(), 5, LocalTime.of(10, 10, 20)),
-            new Score(Player.B.name(), 9, LocalTime.of(10, 10, 30)),
-            new Score(Player.A.name(), 4, LocalTime.of(10, 10, 40)),
-            new Score(Player.B.name(), 6, LocalTime.of(10, 10, 50)),
-            new Score(Player.A.name(), 8, LocalTime.of(10, 11, 0)),
-            new Score(Player.B.name(), 7, LocalTime.of(10, 11, 10)),
-            new Score(Player.A.name(), 3, LocalTime.of(10, 11, 20))
+            new Score(Player.A.name(), 1),
+            new Score(Player.B.name(), 2),
+            new Score(Player.A.name(), 5),
+            new Score(Player.B.name(), 9),
+            new Score(Player.A.name(), 4),
+            new Score(Player.B.name(), 6),
+            new Score(Player.A.name(), 8),
+            new Score(Player.B.name(), 7),
+            new Score(Player.A.name(), 3)
         );
     }
 }

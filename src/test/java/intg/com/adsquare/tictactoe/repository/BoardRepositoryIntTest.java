@@ -11,8 +11,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.time.LocalTime;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -112,7 +110,7 @@ class BoardRepositoryIntTest {
     @Test
     void updateBoard() {
         // given
-        var newScore = new Score(Player.B.name(), 8, LocalTime.of(11, 10, 30));
+        var newScore = new Score(Player.B.name(), 8);
         Board board = boardRepository.findById(boardId02).block();
         assert board != null;
         board.setPlayerOnTurn(Player.A.name());

@@ -1,5 +1,10 @@
 package com.adsquare.tictactoe.controller;
 
+import static com.adsquare.tictactoe.Util.DELETE_ALL_BOARD;
+import static com.adsquare.tictactoe.Util.PLAY_BOARD;
+import static com.adsquare.tictactoe.Util.SHOW_BOARD;
+import static com.adsquare.tictactoe.Util.SHOW_BOARDS;
+import static com.adsquare.tictactoe.Util.START_BOARD;
 import static com.adsquare.tictactoe.Util.boardId02;
 import static com.adsquare.tictactoe.Util.getBoards;
 
@@ -23,12 +28,6 @@ import com.adsquare.tictactoe.util.Player;
 @TestPropertySource(properties = "spring.mongodb.embedded.version=4.0.21")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class BoardControllerIntTest {
-
-    private static final String START_BOARD = "/v1/startboard";
-    private static final String SHOW_BOARDS = "/v1/showboards";
-    private static final String SHOW_BOARD = "/v1/showboard";
-    private static final String DELETE_ALL_BOARD = "/v1/deleteboards";
-    private static final String PLAY_BOARD = "/v1/playboard";
 
     @Autowired
     private BoardRepository boardRepository;
