@@ -1,5 +1,7 @@
 package com.adsquare.tictactoe.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +39,7 @@ public class BoardController {
 
     @PutMapping("/playboard")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<Board> playBoard(@RequestBody Move move) {
+    public Mono<Board> playBoard(@RequestBody @Valid Move move) {
 
         return boardService.updateBoard(move);
     }

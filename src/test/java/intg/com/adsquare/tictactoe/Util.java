@@ -8,6 +8,12 @@ import com.adsquare.tictactoe.util.Player;
 
 public class Util {
 
+    public static final String START_BOARD = "/v1/startboard";
+    public static final String SHOW_BOARDS = "/v1/showboards";
+    public static final String SHOW_BOARD = "/v1/showboard";
+    public static final String DELETE_ALL_BOARD = "/v1/deleteboards";
+    public static final String PLAY_BOARD = "/v1/playboard";
+
     public static final String boardId01 = "abc";
     public static final String boardId02 = "def";
     public static final String boardId03 = "ghi";
