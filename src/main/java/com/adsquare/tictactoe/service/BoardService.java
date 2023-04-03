@@ -99,7 +99,7 @@ public class BoardService {
         var listPositionsPlayerB = getPositions(board, Player.B);
 
         return isWinner(listPositionsPlayerA) || isWinner(listPositionsPlayerB) ||
-            noMovesLeft(listPositionsPlayerA, listPositionsPlayerB);
+            !areThereMovesLeft(listPositionsPlayerA, listPositionsPlayerB);
     }
 
     private boolean isWinner(final List<Integer> listPositions) {
@@ -125,14 +125,14 @@ public class BoardService {
      * verifies if all positions on the board are occupied by summing up all the position values
      * (1+2+3+4+5+6+7+8+9 = 45)
      *
-     * @param listPositionsPlayerA
-     * @param listPositionsPlayerB
+     * @param positionsPlayerA
+     * @param positionsPlayerB
      * @return
      */
-    private boolean noMovesLeft(final List<Integer> listPositionsPlayerA, final List<Integer> listPositionsPlayerB) {
-        var res01 = listPositionsPlayerA.stream().reduce(Integer::sum);
-        var res02 = listPositionsPlayerB.stream().reduce(Integer::sum);
-        return ((res01.orElse(0) + res02.orElse(0)) == 45);
+    private boolean areThereMovesLeft(final List<Integer> positionsPlayerA, final List<Integer> positionsPlayerB) {
+        var res01 = positionsPlayerA.stream().reduce(Integer::sum);
+        var res02 = positionsPlayerB.stream().reduce(Integer::sum);
+        return ((res01.orElse(0) + res02.orElse(0)) < 45);
     }
 
     private List<Integer> getPositions(final Board board, final Player player) {
