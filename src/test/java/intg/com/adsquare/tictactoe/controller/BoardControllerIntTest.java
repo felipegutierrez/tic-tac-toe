@@ -116,7 +116,7 @@ class BoardControllerIntTest {
             .bodyValue(move)
             .exchange()
             .expectStatus()
-            .isNotFound();
+            .isBadRequest();
     }
 
     @Test
