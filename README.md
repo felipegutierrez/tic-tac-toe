@@ -1,5 +1,7 @@
 # Tic Tac Toe
 
+[![Java CI with Gradle](https://github.com/felipegutierrez/tic-tac-toe/actions/workflows/gradle.yml/badge.svg)](https://github.com/felipegutierrez/tic-tac-toe/actions/workflows/gradle.yml)
+
 ## About
 The game has some basic rules:
 1. There are 2 players
