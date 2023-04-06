@@ -1,6 +1,6 @@
 package com.adsquare.tictactoe.controller;
 
-import static com.adsquare.tictactoe.Util.DELETE_ALL_BOARD;
+import static com.adsquare.tictactoe.Util.DELETE_ALL_BOARDS;
 import static com.adsquare.tictactoe.Util.PLAY_BOARD;
 import static com.adsquare.tictactoe.Util.SHOW_BOARD;
 import static com.adsquare.tictactoe.Util.SHOW_BOARDS;
@@ -122,8 +122,8 @@ class BoardControllerIntTest {
     @Test
     void deleteAllBoards() {
         // when // then
-        webTestClient.post()
-            .uri(DELETE_ALL_BOARD)
+        webTestClient.delete()
+            .uri(DELETE_ALL_BOARDS)
             .exchange()
             .expectStatus()
             .is2xxSuccessful()

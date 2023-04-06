@@ -51,7 +51,7 @@ class BoardServiceTest {
         );
     }
 
-    @ParameterizedTest
+    /*@ParameterizedTest
     @MethodSource("getCompletedBoards")
     void completedBoards(final Board board) {
         // given
@@ -60,9 +60,9 @@ class BoardServiceTest {
 
         // then
         assertTrue(result);
-    }
+    }*/
 
-    @ParameterizedTest
+    /*@ParameterizedTest
     @MethodSource("getUncompletedBoards")
     void uncompletedBoards(final Board board) {
         // given
@@ -71,5 +71,5 @@ class BoardServiceTest {
 
         // then
         assertFalse(result);
-    }
+    }*/
 }

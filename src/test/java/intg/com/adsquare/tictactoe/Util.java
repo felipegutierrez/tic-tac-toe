@@ -14,13 +14,14 @@ public class Util {
     public static final String START_BOARD = "/v1/startboard";
     public static final String SHOW_BOARDS = "/v1/showboards";
     public static final String SHOW_BOARD = "/v1/showboard";
-    public static final String DELETE_ALL_BOARD = "/v1/deleteboards";
+    public static final String DELETE_ALL_BOARDS = "/v1/deleteboards";
     public static final String PLAY_BOARD = "/v1/playboard";
     // version 2 is a Restful api using functional approach
     public static final String START_BOARD_FUNC = "/v2/startboard";
     public static final String SHOW_BOARDS_FUNC = "/v2/showboards";
     public static final String SHOW_BOARD_FUNC = "/v2/showboard";
-    public static final String DELETE_ALL_BOARD_FUNC = "/v2/deleteboards";
+    public static final String DELETE_ALL_BOARDS_FUNC = "/v2/deleteboards";
+    public static final String DELETE_BOARD_FUNC = "/v2/deleteboard";
     public static final String PLAY_BOARD_FUNC = "/v2/playboard";
 
     public static final String boardId01 = "abc";
