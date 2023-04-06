@@ -38,8 +38,8 @@ class BoardRouterTest {
     @Test
     void playBoard() {
         // given
-        var move = new Move(boardId02, Player.B.name(), 3);
-        var board = new Board(boardId02, Player.B.name(), Strings.EMPTY, false, new ArrayList<>());
+        var move = new Move(boardId02, Player.B, 3);
+        var board = new Board(boardId02, Player.B, null, false, new ArrayList<>());
 
         // when
         when(boardRepository.findById(isA(String.class))).thenReturn(Mono.just(board));

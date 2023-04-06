@@ -46,7 +46,7 @@ docker-compose down
 curl -i -H "Content-Type: application/json" -X POST http://localhost:8080/v1/startboard
 ```
 ```json
-{"id":"6429b52726edc9050fa31a77","playerOnTurn":"A","winnerPlayer":"","boardComplete":false,"scores":[]}
+{"id":"642ede8bc54327371a682936","playerOnTurn":"A","winnerPlayer":"","boardComplete":false,"scores":[]}
 ```
 2. Show all boards to recover you board ID, see who is the next player, check all positions and if there is a winner
 ```shell
@@ -56,7 +56,7 @@ curl http://localhost:8080/v1/showboards | json_pp -json_opt pretty,canonical
 [
    {
       "boardComplete" : false,
-      "id" : "6429b52726edc9050fa31a77",
+      "id" : "642ede8bc54327371a682936",
       "playerOnTurn" : "A",
       "scores" : [],
       "winnerPlayer" : ""
@@ -67,60 +67,60 @@ curl http://localhost:8080/v1/showboards | json_pp -json_opt pretty,canonical
 * register a move using the `playerOnTurn : A`
 ```shell
 curl -i \
--d '{"boardId":"6429b52726edc9050fa31a77", "player": "A", "position": 3}' \
+-d '{"boardId":"642ede8bc54327371a682936", "player": "A", "position": 3}' \
 -H "Content-Type: application/json" \
 -X PUT http://localhost:8080/v1/playboard
 ```
 * register a move using the `playerOnTurn : B`
 ```shell
 curl -i \
--d '{"boardId":"6429b52726edc9050fa31a77", "player": "B", "position": 1}' \
+-d '{"boardId":"642ede8bc54327371a682936", "player": "B", "position": 1}' \
 -H "Content-Type: application/json" \
 -X PUT http://localhost:8080/v1/playboard
 ```
 * register a move using the `playerOnTurn : A`
 ```shell
 curl -i \
--d '{"boardId":"6429b52726edc9050fa31a77", "player": "A", "position": 7}' \
+-d '{"boardId":"642ede8bc54327371a682936", "player": "A", "position": 7}' \
 -H "Content-Type: application/json" \
 -X PUT http://localhost:8080/v1/playboard
 ```
 * register a move using the `playerOnTurn : B`
 ```shell
 curl -i \
--d '{"boardId":"6429b52726edc9050fa31a77", "player": "B", "position": 5}' \
+-d '{"boardId":"642ede8bc54327371a682936", "player": "B", "position": 5}' \
 -H "Content-Type: application/json" \
 -X PUT http://localhost:8080/v1/playboard
 ```
 * register a move using the `playerOnTurn : A`
 ```shell
 curl -i \
--d '{"boardId":"6429b52726edc9050fa31a77", "player": "A", "position": 9}' \
+-d '{"boardId":"642ede8bc54327371a682936", "player": "A", "position": 9}' \
 -H "Content-Type: application/json" \
 -X PUT http://localhost:8080/v1/playboard
 ```
 * register a move using the `playerOnTurn : B`
 ```shell
 curl -i \
--d '{"boardId":"6429b52726edc9050fa31a77", "player": "B", "position": 6}' \
+-d '{"boardId":"642ede8bc54327371a682936", "player": "B", "position": 6}' \
 -H "Content-Type: application/json" \
 -X PUT http://localhost:8080/v1/playboard
 ```
 * register a move using the `playerOnTurn : A`
 ```shell
 curl -i \
--d '{"boardId":"6429b52726edc9050fa31a77", "player": "A", "position": 8}' \
+-d '{"boardId":"642ede8bc54327371a682936", "player": "A", "position": 8}' \
 -H "Content-Type: application/json" \
 -X PUT http://localhost:8080/v1/playboard
 ```
 4. `playerOnTurn : A` wins and you cannot register further moves. Check the board again.
 ```shell
-curl http://localhost:8080/v1/showboards | json_pp -json_opt pretty,canonical
+curl http://localhost:8080/v1/showboard/642ede8bc54327371a682936 | json_pp -json_opt pretty,canonical
 ```
 5. start a new board and execute concurrent calls
 * delete all boards
 ```shell
-curl -i -H "Content-Type: application/json" -X POST http://localhost:8080/v1/deleteboards
+curl -i -H "Content-Type: application/json" -X DELETE http://localhost:8080/v1/deleteboards
 ```
 * start a new board
 ```shell
@@ -154,6 +154,17 @@ curl -i -d '{"boardId":"6429c954284d5d5a0fcc6e78", "player": "A", "position": 9}
 * check the board state and ensure that player A has recorded only one position on the board
 ```shell
 curl http://localhost:8080/v1/showboards | json_pp -json_opt pretty,canonical
+```
+6. version 2 of the endpoints is using function approach of spring-webflux. Here is the list of end-points:
+```shell
+curl http://localhost:8080/v2/showboards | json_pp -json_opt pretty,canonical
+curl -i -H "Content-Type: application/json" -X POST http://localhost:8080/v2/startboard
+curl -i \
+-d '{"boardId":"642ee34ebbffa67c4c382f6a", "player": "A", "position": 3}' \
+-H "Content-Type: application/json" \
+-X PUT http://localhost:8080/v1/playboard
+curl -i -H "Content-Type: application/json" -X DELETE http://localhost:8080/v2/deleteboards
+curl http://localhost:8080/v2/showboard/642ee34ebbffa67c4c382f6a | json_pp -json_opt pretty,canonical
 ```
 ## Tests
 ```shell

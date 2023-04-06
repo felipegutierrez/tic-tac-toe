@@ -2,7 +2,6 @@ package com.adsquare.tictactoe.service;
 
 import java.util.List;
 
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
 import com.adsquare.tictactoe.domain.Board;
@@ -27,7 +26,7 @@ public class BoardService {
 
     public Mono<Board> startNewBoard() {
         return boardRepository.save(
-            new Board(null, ticTacToeRules.getRandomPlayer().name(), Strings.EMPTY, false, List.of())
+            new Board(null, ticTacToeRules.getRandomPlayer(), null, false, List.of())
         );
     }
 
@@ -55,7 +54,7 @@ public class BoardService {
                 }
                 board.getScores().add(new Score(move.player(), move.position()));
                 if (ticTacToeRules.isBoardComplete(board)) {
-                    board.setPlayerOnTurn(Strings.EMPTY);
+                    board.setPlayerOnTurn(null);
                     board.setBoardComplete(true);
                     board.setWinnerPlayer(ticTacToeRules.getWinnerPlayer(board));
                 } else {

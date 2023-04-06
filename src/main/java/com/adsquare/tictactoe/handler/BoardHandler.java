@@ -28,19 +28,10 @@ public class BoardHandler {
     }
 
     public Mono<ServerResponse> startNewBoard(final ServerRequest request) {
-        return request.bodyToMono(String.class)
-            .flatMap(boardId -> boardRepository.save(
-                new Board(
-                    (boardId == null || Strings.isBlank(boardId)) ? null : boardId,
-                    ticTacToeRules.getRandomPlayer().name(),
-                    Strings.EMPTY,
-                    false,
-                    List.of()
-                )
-            ))
+        return boardRepository
+            .save(new Board(null, ticTacToeRules.getRandomPlayer(), null, false, List.of()))
             .flatMap(ServerResponse.status(HttpStatus.CREATED)::bodyValue)
             .log();
-
     }
 
     public Mono<ServerResponse> getAllBoards(final ServerRequest request) {
@@ -69,7 +60,7 @@ public class BoardHandler {
                     }
                     board.getScores().add(new Score(move.player(), move.position()));
                     if (ticTacToeRules.isBoardComplete(board)) {
-                        board.setPlayerOnTurn(Strings.EMPTY);
+                        board.setPlayerOnTurn(null);
                         board.setBoardComplete(true);
                         board.setWinnerPlayer(ticTacToeRules.getWinnerPlayer(board));
                     } else {

@@ -1,4 +1,6 @@
 package com.adsquare.tictactoe.domain;
 
-public record Score(String player, Integer position) {
+import com.adsquare.tictactoe.util.Player;
+
+public record Score(Player player, Integer position) {
 }

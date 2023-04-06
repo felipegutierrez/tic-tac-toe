@@ -32,11 +32,11 @@ class TicTacToeRulesTest {
 
     private static Stream<Arguments> getPositionsUnavailable() {
         return Stream.of(
-            Arguments.of(new Move(boardId02, Player.B.name(), 1)),
-            Arguments.of(new Move(boardId02, Player.B.name(), 0)),
-            Arguments.of(new Move(boardId02, Player.B.name(), 10)),
-            Arguments.of(new Move(boardId02, Player.A.name(), 3)),
-            Arguments.of(new Move(boardId01, Player.A.name(), 2))
+            Arguments.of(new Move(boardId02, Player.B, 1)),
+            Arguments.of(new Move(boardId02, Player.B, 0)),
+            Arguments.of(new Move(boardId02, Player.B, 10)),
+            Arguments.of(new Move(boardId02, Player.A, 3)),
+            Arguments.of(new Move(boardId01, Player.A, 2))
         );
     }
 
@@ -65,7 +65,7 @@ class TicTacToeRulesTest {
     @Test
     void positionsAvailable() {
         // given
-        var move = new Move(boardId02, Player.B.name(), 3);
+        var move = new Move(boardId02, Player.B, 3);
 
         // when
         var result = ticTacToeRules.isPositionAvailable(getBoard02(), move);

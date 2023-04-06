@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
 import com.adsquare.tictactoe.domain.Board;
@@ -43,11 +42,8 @@ public class TicTacToeRules {
         return (randomBinary == 0 ? Player.A : Player.B);
     }
 
-    public String getNextPlayer(final Board board) {
-        if (board.getPlayerOnTurn().equals(Player.A.name())) {
-            return Player.B.name();
-        }
-        return Player.A.name();
+    public Player getNextPlayer(final Board board) {
+        return (board.getPlayerOnTurn().equals(Player.A) ? Player.B : Player.A);
     }
 
     /**
@@ -94,13 +90,13 @@ public class TicTacToeRules {
         return false;
     }
 
-    public String getWinnerPlayer(final Board board) {
+    public Player getWinnerPlayer(final Board board) {
         if (isWinner(getPositions(board, Player.A))) {
-            return Player.A.name();
+            return Player.A;
         } else if (isWinner(getPositions(board, Player.B))) {
-            return Player.B.name();
+            return Player.B;
         }
-        return Strings.EMPTY;
+        return null;
     }
 
     /**
@@ -119,7 +115,7 @@ public class TicTacToeRules {
 
     public List<Integer> getPositions(final Board board, final Player player) {
         return board.getScores()
-            .stream().filter(score -> score.player().equals(player.name()))
+            .stream().filter(score -> score.player().equals(player))
             .map(Score::position)
             .toList();
     }

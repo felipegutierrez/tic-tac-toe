@@ -78,9 +78,8 @@ class BoardRouterIntTest {
                 assert newBoard.getId() != null;
                 assertTrue(newBoard.getId().equals(boardId) || !newBoard.getId().equals(Strings.EMPTY));
                 assert !newBoard.getBoardComplete();
-                assert (newBoard.getPlayerOnTurn().equals(Player.A.name()) ||
-                    newBoard.getPlayerOnTurn().equals(Player.B.name()));
-                assert newBoard.getWinnerPlayer().equals(Strings.EMPTY);
+                assert (newBoard.getPlayerOnTurn().equals(Player.A) || newBoard.getPlayerOnTurn().equals(Player.B));
+                assert newBoard.getWinnerPlayer() == null;
                 assert newBoard.getScores().size() == 0;
             });
     }
@@ -153,7 +152,7 @@ class BoardRouterIntTest {
     @Test
     void playNonExistingBoard() {
         // given
-        var move = new Move("non-existing-board", Player.B.name(), 3);
+        var move = new Move("non-existing-board", Player.B, 3);
         // when // then
         webTestClient.put()
             .uri(PLAY_BOARD_FUNC)
@@ -166,7 +165,7 @@ class BoardRouterIntTest {
     @Test
     void playBoard() {
         // given
-        var move = new Move(boardId02, Player.B.name(), 3);
+        var move = new Move(boardId02, Player.B, 3);
         // when // then
         webTestClient.put()
             .uri(PLAY_BOARD_FUNC)

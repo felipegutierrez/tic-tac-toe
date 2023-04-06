@@ -24,6 +24,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.adsquare.tictactoe.domain.Move;
 import com.adsquare.tictactoe.service.BoardService;
+import com.adsquare.tictactoe.util.Player;
 import reactor.core.publisher.Mono;
 
 @AutoConfigureWebTestClient
@@ -40,14 +41,11 @@ class BoardControllerTest {
 
     private static Stream<Arguments> getCompletedBoards() {
         return Stream.of(
-            Arguments.of(
-                new Move(boardId02, Strings.EMPTY, 0),
-                "player must be present, position must be higher or equal to 1"
-            ),
-            Arguments.of(new Move(boardId02, Strings.EMPTY, 1), "player must be present"),
-            Arguments.of(new Move(boardId02, "A", 0), "position must be higher or equal to 1"),
-            Arguments.of(new Move(boardId02, "A", 10), "position must be lower or equal to 9"),
-            Arguments.of(new Move(Strings.EMPTY, "A", 9), "boardId must be present")
+            Arguments.of(new Move(boardId02, Player.A, 0), "position must be higher or equal to 1"),
+            Arguments.of(new Move(boardId02, null, 1), "player must be present"),
+            Arguments.of(new Move(boardId02, Player.A, 0), "position must be higher or equal to 1"),
+            Arguments.of(new Move(boardId02, Player.A, 10), "position must be lower or equal to 9"),
+            Arguments.of(new Move(Strings.EMPTY, Player.A, 9), "boardId must be present")
         );
     }
 

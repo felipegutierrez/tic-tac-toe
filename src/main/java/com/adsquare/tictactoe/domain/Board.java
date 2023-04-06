@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.adsquare.tictactoe.util.Player;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,9 +19,9 @@ public class Board {
     @Id
     private String id;
 
-    private String playerOnTurn;
+    private Player playerOnTurn;
 
-    private String winnerPlayer;
+    private Player winnerPlayer;
 
     private Boolean boardComplete;
 

@@ -10,8 +10,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,7 +70,7 @@ class BoardRepositoryIntTest {
         StepVerifier.create(boardMono)
             .assertNext(board -> {
                 assertEquals(boardId01, board.getId());
-                assertEquals(Player.A.name(), board.getWinnerPlayer());
+                assertEquals(Player.A, board.getWinnerPlayer());
                 assertEquals(true, board.getBoardComplete());
                 assertEquals(7, board.getScores().size());
                 assertThat(board.getScores(), hasItem(getScoreBoard01().get(0)));
@@ -87,7 +87,7 @@ class BoardRepositoryIntTest {
     @Test
     void saveBoard() {
         // given
-        var board = new Board(null, Player.B.name(), Strings.EMPTY, false, getScoreBoard03());
+        var board = new Board(null, Player.B, null, false, getScoreBoard03());
 
         // when
         final Mono<Board> boardMono = boardRepository.save(board).log();
@@ -96,8 +96,8 @@ class BoardRepositoryIntTest {
         StepVerifier.create(boardMono)
             .assertNext(b -> {
                 assertNotNull(b.getId());
-                assertEquals(Player.B.name(), b.getPlayerOnTurn());
-                assertEquals(Strings.EMPTY, b.getWinnerPlayer());
+                assertEquals(Player.B, b.getPlayerOnTurn());
+                assertNull(b.getWinnerPlayer());
                 assertEquals(false, b.getBoardComplete());
                 assertEquals(3, b.getScores().size());
                 assertThat(b.getScores(), hasItem(getScoreBoard03().get(0)));
@@ -110,9 +110,9 @@ class BoardRepositoryIntTest {
     @Test
     void updateBoard() {
         // given
-        var newScore = new Score(Player.B.name(), 8);
+        var newScore = new Score(Player.B, 8);
         Board board = boardRepository.findById(boardId02).block();
-        board.setPlayerOnTurn(Player.A.name());
+        board.setPlayerOnTurn(Player.A);
         board.getScores().add(newScore);
 
         // when
@@ -122,8 +122,8 @@ class BoardRepositoryIntTest {
         StepVerifier.create(boardMono)
             .assertNext(b -> {
                 assertNotNull(b.getId());
-                assertEquals(Player.A.name(), b.getPlayerOnTurn());
-                assertEquals(Strings.EMPTY, b.getWinnerPlayer());
+                assertEquals(Player.A, b.getPlayerOnTurn());
+                assertNull(b.getWinnerPlayer());
                 assertEquals(false, b.getBoardComplete());
                 assertEquals(4, b.getScores().size());
                 assertThat(b.getScores(), hasItem(getScoreBoard02().get(0)));
