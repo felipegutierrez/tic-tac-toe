@@ -18,11 +18,11 @@ public class BoardRouter {
         return route()
             .nest(path("/v2"), builder ->
                 builder
-                    .GET("/showboards", boardHandler::getAllBoards)
+                    .GET("/showboards", request -> boardHandler.getAllBoards())
                     .GET("/showboard/{id}", boardHandler::getBoard)
-                    .POST("/startboard", boardHandler::startNewBoard)
+                    .POST("/startboard", request -> boardHandler.startNewBoard())
                     .PUT("/playboard", boardHandler::playBoard)
-                    .DELETE("/deleteboards", boardHandler::deleteAllBoards)
+                    .DELETE("/deleteboards", request -> boardHandler.deleteAllBoards())
                     .DELETE("/deleteboard/{id}", boardHandler::deleteBoard)
             )
             .build();

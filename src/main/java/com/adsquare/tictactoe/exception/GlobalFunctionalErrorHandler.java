@@ -22,6 +22,8 @@ public class GlobalFunctionalErrorHandler implements ErrorWebExceptionHandler {
 
         if (ex instanceof BoardException) {
             exchange.getResponse().setStatusCode(HttpStatus.BAD_REQUEST);
+        } else if (ex instanceof BoardNotFoundException) {
+            exchange.getResponse().setStatusCode(HttpStatus.NOT_FOUND);
         } else {
             exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
         }

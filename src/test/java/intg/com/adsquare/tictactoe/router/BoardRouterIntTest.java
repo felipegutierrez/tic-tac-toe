@@ -7,6 +7,7 @@ import static com.adsquare.tictactoe.Util.SHOW_BOARDS_FUNC;
 import static com.adsquare.tictactoe.Util.SHOW_BOARD_FUNC;
 import static com.adsquare.tictactoe.Util.START_BOARD_FUNC;
 import static com.adsquare.tictactoe.Util.boardId02;
+import static com.adsquare.tictactoe.Util.boardId07;
 import static com.adsquare.tictactoe.Util.getBoards;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -123,6 +124,19 @@ class BoardRouterIntTest {
             .expectStatus()
             .is4xxClientError()
             .expectBody(Board.class);
+    }
+
+    @Test
+    void getBoardNotFound() {
+        // given
+        // when // then
+        webTestClient.get()
+            .uri(SHOW_BOARD_FUNC + "/{id}", boardId07)
+            .exchange()
+            .expectStatus()
+            .isNotFound()
+            .expectBody(String.class)
+            .isEqualTo("Board " + boardId07 + " not found");
     }
 
     @Test

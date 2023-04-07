@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -16,6 +15,7 @@ import com.adsquare.tictactoe.domain.Board;
 import com.adsquare.tictactoe.domain.Move;
 import com.adsquare.tictactoe.domain.Score;
 import com.adsquare.tictactoe.exception.BoardException;
+import com.adsquare.tictactoe.exception.BoardNotFoundException;
 import com.adsquare.tictactoe.repository.BoardRepository;
 import com.adsquare.tictactoe.util.TicTacToeRules;
 import lombok.extern.slf4j.Slf4j;
@@ -39,24 +39,23 @@ public class BoardHandler {
         this.validator = validator;
     }
 
-    public Mono<ServerResponse> startNewBoard(final ServerRequest request) {
+    public Mono<ServerResponse> startNewBoard() {
         return boardRepository
             .save(new Board(null, ticTacToeRules.getRandomPlayer(), null, false, List.of()))
             .flatMap(ServerResponse.status(HttpStatus.CREATED)::bodyValue)
             .log();
     }
 
-    public Mono<ServerResponse> getAllBoards(final ServerRequest request) {
+    public Mono<ServerResponse> getAllBoards() {
         var boardFlux = boardRepository.findAll();
         return ServerResponse.ok().body(boardFlux, Board.class).log();
     }
 
     public Mono<ServerResponse> getBoard(final ServerRequest request) {
         var boardId = request.pathVariable("id");
-        if (Strings.isEmpty(boardId)) {
-            throw new BoardException("BoardId is empty.");
-        }
-        var boardMono = boardRepository.findById(request.pathVariable("id"));
+        var boardMono = boardRepository
+            .findById(boardId)
+            .switchIfEmpty(Mono.error(new BoardNotFoundException("Board " + boardId + " not found")));
         return ServerResponse.ok().body(boardMono, Board.class).log();
     }
 
@@ -99,7 +98,7 @@ public class BoardHandler {
         }
     }
 
-    public Mono<ServerResponse> deleteAllBoards(final ServerRequest serverRequest) {
+    public Mono<ServerResponse> deleteAllBoards() {
         final Mono<Void> voidMono = boardRepository.deleteAll();
         return ServerResponse.ok().body(voidMono, Board.class).log();
     }
