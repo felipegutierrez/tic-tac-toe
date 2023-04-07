@@ -13,7 +13,7 @@ public record Move(
     String boardId,
 
     @NotEmpty(groups = { Player.class })
-    @NotNull(message = "player must be present")
+    @NotNull(message = "player equals 'null' is not valid")
     Player player,
 
     @Min(value = 1, message = "position must be higher or equal to 1")

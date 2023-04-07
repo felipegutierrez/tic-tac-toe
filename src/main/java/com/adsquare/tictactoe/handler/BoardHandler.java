@@ -1,6 +1,10 @@
 package com.adsquare.tictactoe.handler;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpStatus;
@@ -14,17 +18,25 @@ import com.adsquare.tictactoe.domain.Score;
 import com.adsquare.tictactoe.exception.BoardException;
 import com.adsquare.tictactoe.repository.BoardRepository;
 import com.adsquare.tictactoe.util.TicTacToeRules;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @Component
 public class BoardHandler {
 
     private final BoardRepository boardRepository;
     private final TicTacToeRules ticTacToeRules;
+    private final Validator validator;
 
-    public BoardHandler(final BoardRepository boardRepository, final TicTacToeRules ticTacToeRules) {
+    public BoardHandler(
+        final BoardRepository boardRepository,
+        final TicTacToeRules ticTacToeRules,
+        final Validator validator
+    ) {
         this.boardRepository = boardRepository;
         this.ticTacToeRules = ticTacToeRules;
+        this.validator = validator;
     }
 
     public Mono<ServerResponse> startNewBoard(final ServerRequest request) {
@@ -50,7 +62,9 @@ public class BoardHandler {
 
     public Mono<ServerResponse> playBoard(final ServerRequest request) {
         var moveMono = request.bodyToMono(Move.class);
-        final Mono<Board> boardMonoSaved = moveMono.flatMap(move -> boardRepository.findById(move.boardId())
+        final Mono<Board> boardMonoSaved = moveMono
+            .doOnNext(this::validate)
+            .flatMap(move -> boardRepository.findById(move.boardId())
                 .flatMap(board -> {
                     if (!board.getPlayerOnTurn().equals(move.player())) {
                         return Mono.error(new BoardException("It is not the turn of player " + move.player()));
@@ -70,6 +84,19 @@ public class BoardHandler {
                 }))
             .switchIfEmpty(Mono.error(new BoardException("Board not found")));
         return ServerResponse.ok().body(boardMonoSaved, Board.class).log();
+    }
+
+    private void validate(final Move move) {
+        var constraintViolations = validator.validate(move);
+        log.info("ConstraintViolations: {}", constraintViolations);
+        if (!constraintViolations.isEmpty()) {
+            var errorMessage = constraintViolations
+                .stream()
+                .map(ConstraintViolation::getMessage)
+                .sorted()
+                .collect(Collectors.joining(","));
+            throw new BoardException(errorMessage);
+        }
     }
 
     public Mono<ServerResponse> deleteAllBoards(final ServerRequest serverRequest) {

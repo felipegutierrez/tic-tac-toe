@@ -42,7 +42,7 @@ class BoardControllerTest {
     private static Stream<Arguments> getCompletedBoards() {
         return Stream.of(
             Arguments.of(new Move(boardId02, Player.A, 0), "position must be higher or equal to 1"),
-            Arguments.of(new Move(boardId02, null, 1), "player must be present"),
+            Arguments.of(new Move(boardId02, null, 1), "player equals 'null' is not valid"),
             Arguments.of(new Move(boardId02, Player.A, 0), "position must be higher or equal to 1"),
             Arguments.of(new Move(boardId02, Player.A, 10), "position must be lower or equal to 9"),
             Arguments.of(new Move(Strings.EMPTY, Player.A, 9), "boardId must be present")

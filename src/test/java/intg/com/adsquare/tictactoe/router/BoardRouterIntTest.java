@@ -159,7 +159,9 @@ class BoardRouterIntTest {
             .bodyValue(move)
             .exchange()
             .expectStatus()
-            .is5xxServerError();
+            .isBadRequest()
+            .expectBody(String.class)
+            .isEqualTo("Board not found");
     }
 
     @Test
