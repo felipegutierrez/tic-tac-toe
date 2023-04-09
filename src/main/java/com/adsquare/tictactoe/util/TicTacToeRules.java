@@ -115,7 +115,8 @@ public class TicTacToeRules {
 
     public List<Integer> getPositions(final Board board, final Player player) {
         return board.getScores()
-            .stream().filter(score -> score.player().equals(player))
+            .stream()
+            .filter(score -> score.player().equals(player))
             .map(Score::position)
             .toList();
     }

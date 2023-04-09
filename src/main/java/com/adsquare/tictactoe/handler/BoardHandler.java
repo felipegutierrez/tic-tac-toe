@@ -7,6 +7,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -42,13 +43,19 @@ public class BoardHandler {
     public Mono<ServerResponse> startNewBoard() {
         return boardRepository
             .save(new Board(null, ticTacToeRules.getRandomPlayer(), null, false, List.of()))
-            .flatMap(ServerResponse.status(HttpStatus.CREATED)::bodyValue)
+            .flatMap(
+                ServerResponse.status(HttpStatus.CREATED)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    ::bodyValue
+            )
             .log();
     }
 
     public Mono<ServerResponse> getAllBoards() {
         var boardFlux = boardRepository.findAll();
-        return ServerResponse.ok().body(boardFlux, Board.class).log();
+        return ServerResponse.ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(boardFlux, Board.class).log();
     }
 
     public Mono<ServerResponse> getBoard(final ServerRequest request) {
@@ -56,7 +63,9 @@ public class BoardHandler {
         var boardMono = boardRepository
             .findById(boardId)
             .switchIfEmpty(Mono.error(new BoardNotFoundException("Board " + boardId + " not found")));
-        return ServerResponse.ok().body(boardMono, Board.class).log();
+        return ServerResponse.ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(boardMono, Board.class).log();
     }
 
     public Mono<ServerResponse> playBoard(final ServerRequest request) {
@@ -81,8 +90,11 @@ public class BoardHandler {
                     }
                     return boardRepository.save(board);
                 }))
-            .switchIfEmpty(Mono.error(new BoardException("Board not found")));
-        return ServerResponse.ok().body(boardMonoSaved, Board.class).log();
+            .switchIfEmpty(Mono.error(new BoardException("Board not found")))
+            .log();
+        return ServerResponse.ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(boardMonoSaved, Board.class).log();
     }
 
     private void validate(final Move move) {
@@ -100,7 +112,9 @@ public class BoardHandler {
 
     public Mono<ServerResponse> deleteAllBoards() {
         final Mono<Void> voidMono = boardRepository.deleteAll();
-        return ServerResponse.ok().body(voidMono, Board.class).log();
+        return ServerResponse.ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(voidMono, Board.class).log();
     }
 
     public Mono<ServerResponse> deleteBoard(final ServerRequest request) {
