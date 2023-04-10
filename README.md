@@ -168,6 +168,6 @@ curl http://localhost:8080/v2/showboard/642ee34ebbffa67c4c382f6a | json_pp -json
 ```
 ## Tests
 ```shell
-./gradlew test
+./gradlew cleanTest test
 ```
 
