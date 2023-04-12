@@ -2,7 +2,6 @@ package com.adsquare.tictactoe.exception;
 
 import java.util.stream.Collectors;
 
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,7 +20,7 @@ public class GlobalErrorHandler {
         var error = exception.getBindingResult()
             .getAllErrors()
             .stream()
-            .map(DefaultMessageSourceResolvable::getDefaultMessage)
+            .map(objectError -> (objectError.getDefaultMessage() != null ? objectError.getDefaultMessage() : ""))
             .sorted()
             .collect(Collectors.joining(", "));
         log.error("Error is: {}", error);
@@ -30,9 +29,16 @@ public class GlobalErrorHandler {
     }
 
     @ExceptionHandler(BoardException.class)
-    public ResponseEntity<String> handleRuntimeException(BoardException ex) {
+    public ResponseEntity<String> handleBoardException(BoardException ex) {
         log.error("Error is: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(BoardNotFoundException.class)
+    public ResponseEntity<String> handleBoardNotFoundException(BoardNotFoundException ex) {
+        log.error("Error is: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
             .body(ex.getMessage());
     }
 }

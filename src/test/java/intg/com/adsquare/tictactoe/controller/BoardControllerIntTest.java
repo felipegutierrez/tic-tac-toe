@@ -1,6 +1,6 @@
 package com.adsquare.tictactoe.controller;
 
-import static com.adsquare.tictactoe.Util.DELETE_ALL_BOARD;
+import static com.adsquare.tictactoe.Util.DELETE_ALL_BOARDS;
 import static com.adsquare.tictactoe.Util.PLAY_BOARD;
 import static com.adsquare.tictactoe.Util.SHOW_BOARD;
 import static com.adsquare.tictactoe.Util.SHOW_BOARDS;
@@ -8,7 +8,6 @@ import static com.adsquare.tictactoe.Util.START_BOARD;
 import static com.adsquare.tictactoe.Util.boardId02;
 import static com.adsquare.tictactoe.Util.getBoards;
 
-import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,9 +61,8 @@ class BoardControllerIntTest {
                 var newBoard = boardEntityExchangeResult.getResponseBody();
                 assert newBoard.getId() != null;
                 assert !newBoard.getBoardComplete();
-                assert (newBoard.getPlayerOnTurn().equals(Player.A.name()) ||
-                    newBoard.getPlayerOnTurn().equals(Player.B.name()));
-                assert newBoard.getWinnerPlayer().equals(Strings.EMPTY);
+                assert (newBoard.getPlayerOnTurn().equals(Player.A) || newBoard.getPlayerOnTurn().equals(Player.B));
+                assert newBoard.getWinnerPlayer() == null;
                 assert newBoard.getScores().size() == 0;
             });
     }
@@ -84,7 +82,7 @@ class BoardControllerIntTest {
     @Test
     void playBoard() {
         // given
-        var move = new Move(boardId02, Player.B.name(), 3);
+        var move = new Move(boardId02, Player.B, 3);
         // when // then
         webTestClient.put()
             .uri(PLAY_BOARD)
@@ -109,7 +107,7 @@ class BoardControllerIntTest {
     @Test
     void playNonExistingBoard() {
         // given
-        var move = new Move("non-existing-board", Player.B.name(), 3);
+        var move = new Move("non-existing-board", Player.B, 3);
         // when // then
         webTestClient.put()
             .uri(PLAY_BOARD)
@@ -122,8 +120,8 @@ class BoardControllerIntTest {
     @Test
     void deleteAllBoards() {
         // when // then
-        webTestClient.post()
-            .uri(DELETE_ALL_BOARD)
+        webTestClient.delete()
+            .uri(DELETE_ALL_BOARDS)
             .exchange()
             .expectStatus()
             .is2xxSuccessful()
