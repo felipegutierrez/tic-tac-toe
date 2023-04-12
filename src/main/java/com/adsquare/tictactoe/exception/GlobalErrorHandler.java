@@ -29,9 +29,16 @@ public class GlobalErrorHandler {
     }
 
     @ExceptionHandler(BoardException.class)
-    public ResponseEntity<String> handleRuntimeException(BoardException ex) {
+    public ResponseEntity<String> handleBoardException(BoardException ex) {
         log.error("Error is: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(BoardNotFoundException.class)
+    public ResponseEntity<String> handleBoardNotFoundException(BoardNotFoundException ex) {
+        log.error("Error is: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
             .body(ex.getMessage());
     }
 }
