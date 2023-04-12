@@ -20,12 +20,10 @@ public class GlobalFunctionalErrorHandler implements ErrorWebExceptionHandler {
         DataBufferFactory dataBufferFactory = exchange.getResponse().bufferFactory();
         final DataBuffer errorMessage = dataBufferFactory.wrap(ex.getMessage().getBytes());
 
-        if (ex instanceof BoardException) {
-            exchange.getResponse().setStatusCode(HttpStatus.BAD_REQUEST);
-        } else if (ex instanceof BoardNotFoundException) {
-            exchange.getResponse().setStatusCode(HttpStatus.NOT_FOUND);
-        } else {
-            exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+        switch (ex) {
+            case BoardException e -> exchange.getResponse().setStatusCode(HttpStatus.BAD_REQUEST);
+            case BoardNotFoundException e -> exchange.getResponse().setStatusCode(HttpStatus.NOT_FOUND);
+            default -> exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return exchange.getResponse().writeWith(Mono.just(errorMessage));

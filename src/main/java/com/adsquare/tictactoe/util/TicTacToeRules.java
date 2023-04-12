@@ -43,7 +43,10 @@ public class TicTacToeRules {
     }
 
     public Player getNextPlayer(final Board board) {
-        return (board.getPlayerOnTurn().equals(Player.A) ? Player.B : Player.A);
+        return switch (board.getPlayerOnTurn()) {
+            case A -> Player.B;
+            case B -> Player.A;
+        };
     }
 
     /**
