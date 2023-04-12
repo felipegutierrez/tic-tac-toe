@@ -46,6 +46,9 @@ public class BoardService {
         return findBoard(move.boardId())
             .switchIfEmpty(Mono.error(new BoardException("Board " + move.boardId() + " not found")))
             .flatMap(board -> {
+                if (board.getWinnerPlayer() != null) {
+                    return Mono.error(new BoardException("This board has already a winner " + board.getWinnerPlayer()));
+                }
                 if (!board.getPlayerOnTurn().equals(move.player())) {
                     return Mono.error(new BoardException("It is not the turn of player " + move.player()));
                 }

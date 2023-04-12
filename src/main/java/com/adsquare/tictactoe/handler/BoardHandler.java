@@ -74,6 +74,9 @@ public class BoardHandler {
             .doOnNext(this::validate)
             .flatMap(move -> boardRepository.findById(move.boardId())
                 .flatMap(board -> {
+                    if (board.getWinnerPlayer() != null) {
+                        return Mono.error(new BoardException("This board has already a winner " + board.getWinnerPlayer()));
+                    }
                     if (!board.getPlayerOnTurn().equals(move.player())) {
                         return Mono.error(new BoardException("It is not the turn of player " + move.player()));
                     }
