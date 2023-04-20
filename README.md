@@ -31,7 +31,7 @@ docker ps
 ```
 * start the Tic-tac-toe application from the terminal
 ```
-./gradlew bootRun
+./gradlew bootRun --args='--spring.profiles.active=local'
 ```
 * or start the Tic=tac-toe application from IntelliJ [TicTacToeApplication.java](src/main/java/com/adsquare/tictactoe/TicTacToeApplication.java).
 * stop MongoDB
@@ -169,5 +169,16 @@ curl http://localhost:8080/v2/showboard/642ee34ebbffa67c4c382f6a | json_pp -json
 ## Tests
 ```shell
 ./gradlew cleanTest test
+```
+## Distributed tracing
+
+Start Jaeger docker-compose locally and open its WebUI at [http://localhost:16686/](http://localhost:16686/).
+```shell
+cd jaeger/
+docker-compose up
+```
+Start application on debug mode
+```shell
+./gradlew bootRun --args='--spring.profiles.active=debug'
 ```
 

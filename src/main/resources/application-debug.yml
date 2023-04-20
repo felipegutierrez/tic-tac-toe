@@ -1,7 +1,8 @@
 spring:
-  config.activate.on-profile: local
+  config.activate.on-profile: debug
   data.mongodb:
     uri: ${MONGODB_URI:mongodb://root:rootpassword@localhost:27017/local?authSource=admin}
   sleuth:
-    enabled: false
-
+    enabled: true
+    propagation.type: B3, W3C
+    opentracing.enabled: true
